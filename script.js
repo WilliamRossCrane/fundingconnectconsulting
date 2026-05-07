@@ -7,6 +7,7 @@
  *   - Enquiry & newsletter form handling
  *   - Grants ticker (slider) population
  *   - Footer year auto-update
+ *   - Mobile hamburger nav toggle
  *
  * Form backend notes:
  *   The enquiry and newsletter forms currently show a success message client-side
@@ -18,7 +19,7 @@
  *   placeholder fetch() calls you can wire up.
  */
 
-'use strict';
+"use strict";
 
 /* ─────────────────────────────────────────────
    Page routing
@@ -30,32 +31,34 @@
  */
 function showPage(pageId) {
   // Hide all pages
-  document.querySelectorAll('.page').forEach(function (el) {
-    el.classList.remove('active');
+  document.querySelectorAll(".page").forEach(function (el) {
+    el.classList.remove("active");
   });
 
   // Show the requested page
-  const target = document.getElementById('page-' + pageId);
+  var target = document.getElementById("page-" + pageId);
   if (target) {
-    target.classList.add('active');
+    target.classList.add("active");
   }
 
   // Update nav link active state + aria-current
-  document.querySelectorAll('.nav-links a').forEach(function (link) {
-    link.classList.remove('active');
-    link.removeAttribute('aria-current');
+  document.querySelectorAll(".nav-links a").forEach(function (link) {
+    link.classList.remove("active");
+    link.removeAttribute("aria-current");
   });
 
-  const activeLink = document.getElementById('nav-' + pageId);
+  var activeLink = document.getElementById("nav-" + pageId);
   if (activeLink) {
-    activeLink.classList.add('active');
-    activeLink.setAttribute('aria-current', 'page');
+    activeLink.classList.add("active");
+    activeLink.setAttribute("aria-current", "page");
   }
 
-  // Scroll to top
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+  // Close mobile nav if open
+  closeMobileNav();
 
+  // Scroll to top
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
 /* ─────────────────────────────────────────────
    Tab switching (Connect page)
@@ -68,27 +71,26 @@ function showPage(pageId) {
  */
 function switchTab(tabId, clickedBtn) {
   // Hide all tab panels
-  document.querySelectorAll('.tab-panel').forEach(function (panel) {
-    panel.classList.remove('active');
+  document.querySelectorAll(".tab-panel").forEach(function (panel) {
+    panel.classList.remove("active");
   });
 
   // Deactivate all tab buttons
-  document.querySelectorAll('.tab-btn').forEach(function (btn) {
-    btn.classList.remove('active');
-    btn.setAttribute('aria-selected', 'false');
+  document.querySelectorAll(".tab-btn").forEach(function (btn) {
+    btn.classList.remove("active");
+    btn.setAttribute("aria-selected", "false");
   });
 
   // Activate the selected panel
-  const panel = document.getElementById('tab-' + tabId);
+  var panel = document.getElementById("tab-" + tabId);
   if (panel) {
-    panel.classList.add('active');
+    panel.classList.add("active");
   }
 
   // Activate the clicked button
-  clickedBtn.classList.add('active');
-  clickedBtn.setAttribute('aria-selected', 'true');
+  clickedBtn.classList.add("active");
+  clickedBtn.setAttribute("aria-selected", "true");
 }
-
 
 /* ─────────────────────────────────────────────
    Form helpers
@@ -99,11 +101,11 @@ function switchTab(tabId, clickedBtn) {
  * @param {string} elementId  ID of the .form-success element
  */
 function showSuccess(elementId) {
-  const el = document.getElementById(elementId);
+  var el = document.getElementById(elementId);
   if (!el) return;
-  el.style.display = 'block';
+  el.style.display = "block";
   setTimeout(function () {
-    el.style.display = 'none';
+    el.style.display = "none";
   }, 5000);
 }
 
@@ -113,11 +115,10 @@ function showSuccess(elementId) {
  */
 function clearFields(ids) {
   ids.forEach(function (id) {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
+    var el = document.getElementById(id);
+    if (el) el.value = "";
   });
 }
-
 
 /* ─────────────────────────────────────────────
    Enquiry form submission
@@ -138,16 +139,16 @@ function clearFields(ids) {
  *      - The function receives the POST body and forwards it (e.g. via SendGrid/Resend).
  */
 function submitEnquiry() {
-  const name  = document.getElementById('e-name').value.trim();
-  const email = document.getElementById('e-email').value.trim();
+  var name = document.getElementById("e-name").value.trim();
+  var email = document.getElementById("e-email").value.trim();
 
   if (!name || !email) {
-    alert('Please enter your name and email address.');
+    alert("Please enter your name and email address.");
     return;
   }
 
   /* ── Uncomment and configure to connect a real backend ──
-  const payload = {
+  var payload = {
     name:         name,
     organisation: document.getElementById('e-org').value.trim(),
     email:        email,
@@ -172,10 +173,9 @@ function submitEnquiry() {
   */
 
   // ── Placeholder behaviour (remove once real backend is wired up) ──
-  clearFields(['e-name', 'e-org', 'e-email', 'e-phone', 'e-service', 'e-msg']);
-  showSuccess('e-success');
+  clearFields(["e-name", "e-org", "e-email", "e-phone", "e-service", "e-msg"]);
+  showSuccess("e-success");
 }
-
 
 /* ─────────────────────────────────────────────
    Newsletter form submission
@@ -190,16 +190,16 @@ function submitEnquiry() {
  *   - Vercel Serverless Function: /api/newsletter.js
  */
 function submitNewsletter() {
-  const name  = document.getElementById('n-name').value.trim();
-  const email = document.getElementById('n-email').value.trim();
+  var name = document.getElementById("n-name").value.trim();
+  var email = document.getElementById("n-email").value.trim();
 
   if (!name || !email) {
-    alert('Please enter your name and email address.');
+    alert("Please enter your name and email address.");
     return;
   }
 
   /* ── Uncomment and configure to connect a real backend ──
-  const payload = {
+  var payload = {
     name:         name,
     email:        email,
     organisation: document.getElementById('n-org').value.trim(),
@@ -222,10 +222,9 @@ function submitNewsletter() {
   */
 
   // ── Placeholder behaviour ──
-  clearFields(['n-name', 'n-email', 'n-org', 'n-state']);
-  showSuccess('n-success');
+  clearFields(["n-name", "n-email", "n-org", "n-state"]);
+  showSuccess("n-success");
 }
-
 
 /* ─────────────────────────────────────────────
    Grants slider
@@ -238,52 +237,52 @@ function submitNewsletter() {
  */
 var GRANTS = [
   {
-    cat:    'Health & Wellbeing',
-    title:  'Indigenous Health & Wellbeing Fund',
-    amount: 'Up to $150,000',
-    close:  'Closes 30 Jun 2026',
+    cat: "Health & Wellbeing",
+    title: "Indigenous Health & Wellbeing Fund",
+    amount: "Up to $150,000",
+    close: "Closes 30 Jun 2026",
   },
   {
-    cat:    'Education',
-    title:  'First Nations Education Support Grants',
-    amount: 'Up to $80,000',
-    close:  'Closes 15 Jul 2026',
+    cat: "Education",
+    title: "First Nations Education Support Grants",
+    amount: "Up to $80,000",
+    close: "Closes 15 Jul 2026",
   },
   {
-    cat:    'Economic Development',
-    title:  'Indigenous Business Australia – Growth Fund',
-    amount: '$50,000 – $500,000',
-    close:  'Open rolling',
+    cat: "Economic Development",
+    title: "Indigenous Business Australia – Growth Fund",
+    amount: "$50,000 – $500,000",
+    close: "Open rolling",
   },
   {
-    cat:    'Housing',
-    title:  'Remote Housing Infrastructure Program',
-    amount: 'Up to $2,000,000',
-    close:  'Closes 1 Aug 2026',
+    cat: "Housing",
+    title: "Remote Housing Infrastructure Program",
+    amount: "Up to $2,000,000",
+    close: "Closes 1 Aug 2026",
   },
   {
-    cat:    'Culture & Arts',
-    title:  'AIATSIS Community Heritage Grants',
-    amount: 'Up to $30,000',
-    close:  'Closes 20 Jul 2026',
+    cat: "Culture & Arts",
+    title: "AIATSIS Community Heritage Grants",
+    amount: "Up to $30,000",
+    close: "Closes 20 Jul 2026",
   },
   {
-    cat:    'Youth',
-    title:  'Strong Communities Youth Development',
-    amount: 'Up to $120,000',
-    close:  'Closes 31 Aug 2026',
+    cat: "Youth",
+    title: "Strong Communities Youth Development",
+    amount: "Up to $120,000",
+    close: "Closes 31 Aug 2026",
   },
   {
-    cat:    'Environment',
-    title:  'Land & Sea Country Ranger Program',
-    amount: 'Up to $250,000',
-    close:  'Open rolling',
+    cat: "Environment",
+    title: "Land & Sea Country Ranger Program",
+    amount: "Up to $250,000",
+    close: "Open rolling",
   },
   {
-    cat:    'Governance',
-    title:  'Governance & Capability Support Fund',
-    amount: 'Up to $60,000',
-    close:  'Closes 14 Sep 2026',
+    cat: "Governance",
+    title: "Governance & Capability Support Fund",
+    amount: "Up to $60,000",
+    close: "Closes 14 Sep 2026",
   },
 ];
 
@@ -291,22 +290,24 @@ var GRANTS = [
  * Build the grants slider by duplicating the cards for a seamless loop.
  */
 function buildGrantsSlider() {
-  var track = document.getElementById('grants-track');
+  var track = document.getElementById("grants-track");
   if (!track) return;
 
   // Duplicate the list so the CSS animation creates a seamless infinite loop
   var allGrants = GRANTS.concat(GRANTS);
 
-  track.innerHTML = allGrants.map(function (g) {
-    return [
-      '<article class="grant-card" role="listitem">',
-      '  <p class="grant-cat">'    + escapeHtml(g.cat)    + '</p>',
-      '  <p class="grant-title">'  + escapeHtml(g.title)  + '</p>',
-      '  <p class="grant-amount">' + escapeHtml(g.amount) + '</p>',
-      '  <p class="grant-close">'  + escapeHtml(g.close)  + '</p>',
-      '</article>',
-    ].join('\n');
-  }).join('');
+  track.innerHTML = allGrants
+    .map(function (g) {
+      return [
+        '<article class="grant-card" role="listitem">',
+        '  <p class="grant-cat">' + escapeHtml(g.cat) + "</p>",
+        '  <p class="grant-title">' + escapeHtml(g.title) + "</p>",
+        '  <p class="grant-amount">' + escapeHtml(g.amount) + "</p>",
+        '  <p class="grant-close">' + escapeHtml(g.close) + "</p>",
+        "</article>",
+      ].join("\n");
+    })
+    .join("");
 }
 
 /**
@@ -316,13 +317,12 @@ function buildGrantsSlider() {
  */
 function escapeHtml(str) {
   return String(str)
-    .replace(/&/g,  '&amp;')
-    .replace(/</g,  '&lt;')
-    .replace(/>/g,  '&gt;')
-    .replace(/"/g,  '&quot;')
-    .replace(/'/g,  '&#39;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
 }
-
 
 /* ─────────────────────────────────────────────
    Footer year
@@ -332,17 +332,66 @@ function escapeHtml(str) {
  * Keep the footer copyright year current automatically.
  */
 function setFooterYear() {
-  var el = document.getElementById('footer-year');
+  var el = document.getElementById("footer-year");
   if (el) {
     el.textContent = new Date().getFullYear();
   }
 }
 
+/* ─────────────────────────────────────────────
+   Mobile hamburger nav
+───────────────────────────────────────────── */
+
+/**
+ * Close the mobile nav drawer.
+ */
+function closeMobileNav() {
+  var toggle = document.getElementById("nav-toggle");
+  var navLinks = document.getElementById("nav-links");
+  if (!toggle || !navLinks) return;
+  toggle.classList.remove("open");
+  navLinks.classList.remove("open");
+  toggle.setAttribute("aria-expanded", "false");
+}
+
+/**
+ * Initialise the mobile hamburger toggle.
+ * Opens/closes the nav drawer; also closes on outside tap or Escape key.
+ */
+function initMobileNav() {
+  var toggle = document.getElementById("nav-toggle");
+  var navLinks = document.getElementById("nav-links");
+  if (!toggle || !navLinks) return;
+
+  toggle.addEventListener("click", function () {
+    var isOpen = navLinks.classList.contains("open");
+    if (isOpen) {
+      closeMobileNav();
+    } else {
+      toggle.classList.add("open");
+      navLinks.classList.add("open");
+      toggle.setAttribute("aria-expanded", "true");
+    }
+  });
+
+  // Close on outside tap
+  document.addEventListener("click", function (e) {
+    if (!toggle.contains(e.target) && !navLinks.contains(e.target)) {
+      closeMobileNav();
+    }
+  });
+
+  // Close on Escape key
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") closeMobileNav();
+  });
+}
 
 /* ─────────────────────────────────────────────
    Initialise on DOM ready
 ───────────────────────────────────────────── */
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener("DOMContentLoaded", function () {
   buildGrantsSlider();
   setFooterYear();
+  initMobileNav();
 });
