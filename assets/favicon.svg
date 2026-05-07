@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 34">
+  <!-- Funding Connect Consulting favicon — replace with a polished version -->
+  <path d="M3 31 Q3 10 20 10 Q37 10 37 31" stroke="#0E4D57" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M9 31 Q9 17 20 17 Q31 17 31 31" stroke="#4A7F7B" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <circle cx="15" cy="11" r="6"   fill="#0E4D57"/>
+  <circle cx="24" cy="9"  r="5.5" fill="#D18B3D"/>
+</svg>

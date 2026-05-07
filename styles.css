@@ -20,23 +20,21 @@
     16. Responsive (mobile)
    ============================================================ */
 
-
 /* ─────────────────────────────────────────────
    1. Design tokens
 ───────────────────────────────────────────── */
 :root {
-  --deep:  #0E4D57;
-  --mid:   #4A7F7B;
-  --pale:  #C6D8D3;
-  --gold:  #D18B3D;
-  --dark:  #2B2B2B;
-  --cream: #F6F3EE;
-  --white: #FFFFFF;
+  --deep: #0e4d57;
+  --mid: #4a7f7b;
+  --pale: #c6d8d3;
+  --gold: #d18b3d;
+  --dark: #2b2b2b;
+  --cream: #f6f3ee;
+  --white: #ffffff;
 
   --nav-height: 68px;
   --page-padding-x: 52px;
 }
-
 
 /* ─────────────────────────────────────────────
    2. Reset & base
@@ -54,7 +52,7 @@ html {
 }
 
 body {
-  font-family: 'Mulish', sans-serif;
+  font-family: "Mulish", sans-serif;
   background: var(--white);
   color: var(--dark);
   min-height: 100vh;
@@ -68,7 +66,6 @@ body {
   border-radius: 2px;
 }
 
-
 /* ─────────────────────────────────────────────
    3. Layout utilities
 ───────────────────────────────────────────── */
@@ -78,43 +75,56 @@ body {
   gap: 8px;
   padding: 13px 26px;
   border-radius: 3px;
-  font-family: 'Mulish', sans-serif;
+  font-family: "Mulish", sans-serif;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.05em;
   cursor: pointer;
   border: none;
   text-decoration: none;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
 }
 
 .btn-white {
   background: var(--white);
   color: var(--deep);
 }
-.btn-white:hover { background: var(--cream); }
+.btn-white:hover {
+  background: var(--cream);
+}
 
 .btn-outline {
   background: transparent;
   color: var(--white);
   border: 1.5px solid rgba(255, 255, 255, 0.4);
 }
-.btn-outline:hover { border-color: var(--white); }
+.btn-outline:hover {
+  border-color: var(--white);
+}
 
 .btn-deep {
   background: var(--deep);
   color: var(--white);
 }
-.btn-deep:hover { background: var(--mid); }
+.btn-deep:hover {
+  background: var(--mid);
+}
 
 .btn-gold {
   background: var(--gold);
   color: var(--white);
 }
-.btn-gold:hover { background: #b87a2e; }
+.btn-gold:hover {
+  background: #b87a2e;
+}
 
-.btn-full { width: 100%; justify-content: center; }
-
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
 
 /* ─────────────────────────────────────────────
    4. Header & navigation
@@ -156,7 +166,7 @@ nav {
 
 .logo-text b {
   display: block;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 14px;
   font-weight: 700;
   color: var(--deep);
@@ -206,7 +216,6 @@ nav {
   color: var(--white) !important;
 }
 
-
 /* ─────────────────────────────────────────────
    5. Page shell
 ───────────────────────────────────────────── */
@@ -219,7 +228,6 @@ nav {
 .page.active {
   display: block;
 }
-
 
 /* ─────────────────────────────────────────────
    6. Home — hero
@@ -237,14 +245,18 @@ nav {
 
 /* Decorative background glow */
 .home-hero::after {
-  content: '';
+  content: "";
   position: absolute;
   right: -80px;
   top: -80px;
   width: 480px;
   height: 480px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(209, 139, 61, 0.18) 0%, transparent 65%);
+  background: radial-gradient(
+    circle,
+    rgba(209, 139, 61, 0.18) 0%,
+    transparent 65%
+  );
   pointer-events: none;
 }
 
@@ -261,14 +273,14 @@ nav {
 }
 
 .hero-tag::before {
-  content: '';
+  content: "";
   width: 20px;
   height: 2px;
   background: var(--gold);
 }
 
 .home-hero h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(38px, 5vw, 68px);
   line-height: 1.08;
   font-weight: 700;
@@ -295,7 +307,6 @@ nav {
   flex-wrap: wrap;
 }
 
-
 /* ─────────────────────────────────────────────
    7. Home — grants slider
 ───────────────────────────────────────────── */
@@ -312,7 +323,7 @@ nav {
 }
 
 .grants-header h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 28px;
   color: var(--deep);
 }
@@ -333,7 +344,7 @@ nav {
 /* Fade edges */
 .grants-track-wrap::before,
 .grants-track-wrap::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   bottom: 0;
@@ -364,8 +375,12 @@ nav {
 }
 
 @keyframes slide {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 .grant-card {
@@ -388,7 +403,7 @@ nav {
 }
 
 .grant-title {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 15px;
   color: var(--deep);
   line-height: 1.35;
@@ -407,7 +422,6 @@ nav {
   color: #888;
 }
 
-
 /* ─────────────────────────────────────────────
    8. Home — company blurb
 ───────────────────────────────────────────── */
@@ -420,7 +434,7 @@ nav {
 }
 
 .blurb-text h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(26px, 3vw, 38px);
   color: var(--deep);
   line-height: 1.2;
@@ -439,7 +453,9 @@ nav {
   font-weight: 600;
   text-decoration: none;
 }
-.blurb-text a:hover { color: var(--gold); }
+.blurb-text a:hover {
+  color: var(--gold);
+}
 
 .blurb-visual {
   display: flex;
@@ -458,7 +474,7 @@ nav {
 }
 
 .arch-box::before {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -40px;
   right: -40px;
@@ -468,10 +484,12 @@ nav {
   background: rgba(209, 139, 61, 0.2);
 }
 
-.arch-box svg { margin-bottom: 20px; }
+.arch-box svg {
+  margin-bottom: 20px;
+}
 
 .arch-box p {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-style: italic;
   font-size: 18px;
   line-height: 1.5;
@@ -489,7 +507,6 @@ nav {
   color: var(--gold);
   font-style: normal;
 }
-
 
 /* ─────────────────────────────────────────────
    9. Shared — page banner
@@ -511,7 +528,7 @@ nav {
 }
 
 .page-banner h1 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: clamp(30px, 4vw, 50px);
   line-height: 1.1;
   max-width: 600px;
@@ -524,7 +541,6 @@ nav {
   max-width: 520px;
   line-height: 1.7;
 }
-
 
 /* ─────────────────────────────────────────────
    10. About page
@@ -554,7 +570,7 @@ nav {
 }
 
 .values-box h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 20px;
   color: var(--deep);
   margin-bottom: 20px;
@@ -616,7 +632,7 @@ nav {
 }
 
 .pillar h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 18px;
   color: var(--deep);
   margin-bottom: 8px;
@@ -638,7 +654,7 @@ nav {
 }
 
 .ack h4 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 18px;
   margin-bottom: 10px;
 }
@@ -648,7 +664,6 @@ nav {
   color: rgba(255, 255, 255, 0.75);
   line-height: 1.75;
 }
-
 
 /* ─────────────────────────────────────────────
    11. Services page
@@ -672,7 +687,9 @@ nav {
   transition: background 0.2s;
 }
 
-.svc:hover { background: var(--cream); }
+.svc:hover {
+  background: var(--cream);
+}
 
 .svc-icon {
   width: 44px;
@@ -686,7 +703,7 @@ nav {
 }
 
 .svc h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 18px;
   color: var(--deep);
   margin-bottom: 10px;
@@ -706,7 +723,7 @@ nav {
 }
 
 .process h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 28px;
   color: var(--deep);
   margin-bottom: 36px;
@@ -721,7 +738,7 @@ nav {
 
 .step-num {
   display: block;
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 42px;
   color: var(--pale);
   line-height: 1;
@@ -741,7 +758,6 @@ nav {
   line-height: 1.65;
 }
 
-
 /* ─────────────────────────────────────────────
    12. Connect page
 ───────────────────────────────────────────── */
@@ -758,7 +774,7 @@ nav {
 }
 
 .connect-left h2 {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 26px;
   color: var(--deep);
   margin-bottom: 8px;
@@ -811,7 +827,10 @@ nav {
   text-decoration: none;
 }
 
-.info-text a:hover { color: var(--deep); text-decoration: underline; }
+.info-text a:hover {
+  color: var(--deep);
+  text-decoration: underline;
+}
 
 /* Small acknowledgement block */
 .ack-small {
@@ -839,7 +858,6 @@ nav {
   background: var(--white);
 }
 
-
 /* ─────────────────────────────────────────────
    13. Forms
 ───────────────────────────────────────────── */
@@ -852,7 +870,7 @@ nav {
 
 .tab-btn {
   padding: 10px 20px;
-  font-family: 'Mulish', sans-serif;
+  font-family: "Mulish", sans-serif;
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.04em;
@@ -862,7 +880,9 @@ nav {
   margin-bottom: -2px;
   cursor: pointer;
   color: #888;
-  transition: color 0.2s, border-color 0.2s;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
 }
 
 .tab-btn.active,
@@ -871,11 +891,17 @@ nav {
   border-bottom-color: var(--deep);
 }
 
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
+.tab-panel {
+  display: none;
+}
+.tab-panel.active {
+  display: block;
+}
 
 /* Field */
-.field { margin-bottom: 14px; }
+.field {
+  margin-bottom: 14px;
+}
 
 .field label {
   display: block;
@@ -897,9 +923,9 @@ nav {
 .field textarea {
   width: 100%;
   padding: 11px 14px;
-  border: 1.5px solid #DDD;
+  border: 1.5px solid #ddd;
   border-radius: 3px;
-  font-family: 'Mulish', sans-serif;
+  font-family: "Mulish", sans-serif;
   font-size: 13px;
   color: var(--dark);
   background: var(--white);
@@ -946,7 +972,6 @@ nav {
   margin-top: 12px;
 }
 
-
 /* ─────────────────────────────────────────────
    14. Footer
 ───────────────────────────────────────────── */
@@ -978,7 +1003,7 @@ footer {
 
 .footer-logo span {
   color: var(--white);
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
   font-size: 14px;
 }
 
@@ -995,7 +1020,9 @@ footer {
   list-style: none;
 }
 
-.footer-col li { margin-bottom: 8px; }
+.footer-col li {
+  margin-bottom: 8px;
+}
 
 .footer-col a {
   color: rgba(255, 255, 255, 0.55);
@@ -1004,7 +1031,9 @@ footer {
   transition: color 0.2s;
 }
 
-.footer-col a:hover { color: var(--gold); }
+.footer-col a:hover {
+  color: var(--gold);
+}
 
 .footer-bar {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
@@ -1014,7 +1043,6 @@ footer {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.3);
 }
-
 
 /* ─────────────────────────────────────────────
    15. Animations
@@ -1030,26 +1058,37 @@ footer {
   }
 }
 
-#page-home.active .hero-tag    { animation: fadeUp 0.45s ease 0.05s both; }
-#page-home.active .home-hero h1 { animation: fadeUp 0.45s ease 0.15s both; }
-#page-home.active .home-hero > p { animation: fadeUp 0.45s ease 0.25s both; }
-#page-home.active .hero-actions  { animation: fadeUp 0.45s ease 0.35s both; }
-
+#page-home.active .hero-tag {
+  animation: fadeUp 0.45s ease 0.05s both;
+}
+#page-home.active .home-hero h1 {
+  animation: fadeUp 0.45s ease 0.15s both;
+}
+#page-home.active .home-hero > p {
+  animation: fadeUp 0.45s ease 0.25s both;
+}
+#page-home.active .hero-actions {
+  animation: fadeUp 0.45s ease 0.35s both;
+}
 
 /* ─────────────────────────────────────────────
    16. Responsive — mobile
 ───────────────────────────────────────────── */
 @media (max-width: 900px) {
-  :root {
-    --page-padding-x: 24px;
+  /* Keep nav links horizontal on mobile */
+
+  .nav-links a:hover,
+  .nav-links .nav-btn:hover {
+    color: var(--deep);
+    background: var(--cream);
+  }
+  .nav-btn {
+    margin: 0;
   }
 
-  nav { padding: 0 var(--page-padding-x); }
-
-  /* Hide nav links on mobile — replace with a hamburger menu if needed */
-  .nav-links { display: none; }
-
-  .home-hero { padding: 56px var(--page-padding-x) 48px; }
+  .home-hero {
+    padding: 56px var(--page-padding-x) 48px;
+  }
 
   .blurb {
     grid-template-columns: 1fr;
@@ -1074,23 +1113,29 @@ footer {
     grid-template-columns: 1fr 1fr;
   }
 
-  .connect-body {
-    grid-template-columns: 1fr;
+  /* Keep footer columns horizontal on mobile */
+  .footer-col {
+    width: 100%;
+    margin-bottom: 0;
+    text-align: left;
   }
 
-  .connect-left,
-  .connect-right {
-    padding: 40px var(--page-padding-x);
-  }
-
-  .footer-inner {
-    grid-template-columns: 1fr;
-    gap: 28px;
+  .footer-col ul {
+    padding-left: 0;
   }
 
   .footer-bar {
     flex-direction: column;
-    gap: 6px;
+    gap: 10px;
+    align-items: flex-start;
+    padding-top: 18px;
+    font-size: 12px;
+  }
+
+  footer {
+    padding-left: var(--page-padding-x);
+    padding-right: var(--page-padding-x);
+    padding-bottom: 32px;
   }
 
   .page-banner {
