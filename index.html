@@ -38,7 +38,7 @@
       content="First Nations funding specialists — grant writing, program design &amp; capacity building."
     />
 
-    <!-- ── Favicon (replace with real assets when available) ── -->
+    <!-- ── Favicon ── -->
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
     <link rel="icon" type="image/png" href="assets/favicon.png" sizes="32x32" />
     <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
@@ -53,11 +53,12 @@
 
     <!-- ── Styles ── -->
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="components/welcome-popup.css" />
   </head>
   <body>
     <!-- ════════════════════════════════
-       HEADER / NAV
-  ════════════════════════════════ -->
+         HEADER / NAV
+    ════════════════════════════════ -->
     <header role="banner">
       <nav aria-label="Main navigation">
         <button
@@ -65,7 +66,6 @@
           onclick="showPage('home')"
           aria-label="Funding Connect Consulting — go to home"
         >
-          <!-- Inline SVG logo mark -->
           <svg
             width="38"
             height="32"
@@ -143,12 +143,11 @@
     </header>
 
     <!-- ════════════════════════════════
-       MAIN CONTENT
-  ════════════════════════════════ -->
+         MAIN CONTENT
+    ════════════════════════════════ -->
     <main id="main-content">
       <!-- ══ PAGE: HOME ══ -->
       <div id="page-home" class="page active" role="region" aria-label="Home">
-        <!-- Hero -->
         <section class="home-hero" aria-labelledby="hero-heading">
           <p class="hero-tag" aria-hidden="true">
             First Nations Funding Specialists
@@ -179,7 +178,6 @@
           </div>
         </section>
 
-        <!-- Recent Grants Slider -->
         <section class="grants-section" aria-labelledby="grants-heading">
           <div class="grants-header">
             <h2 id="grants-heading">Recent Grant Opportunities</h2>
@@ -200,7 +198,6 @@
           </div>
         </section>
 
-        <!-- Company Blurb -->
         <section class="blurb" aria-labelledby="blurb-heading">
           <div class="blurb-text">
             <h2 id="blurb-heading">
@@ -340,7 +337,6 @@
             </aside>
           </div>
 
-          <!-- Pillars -->
           <ul class="pillars-row" role="list" aria-label="Our three pillars">
             <li class="pillar">
               <div class="pillar-icon" aria-hidden="true">
@@ -426,7 +422,6 @@
             </li>
           </ul>
 
-          <!-- Acknowledgement of Country -->
           <aside class="ack" aria-label="Acknowledgement of Country">
             <h4>Acknowledgement of Country</h4>
             <p>
@@ -661,7 +656,6 @@
             </li>
           </ul>
 
-          <!-- How we work -->
           <section class="process" aria-labelledby="process-heading">
             <h2 id="process-heading">How we work</h2>
             <ol class="steps" aria-label="Our four-step process">
@@ -715,7 +709,6 @@
         </div>
 
         <div class="connect-body">
-          <!-- Contact info sidebar -->
           <aside class="connect-left" aria-label="Contact information">
             <h2>We'd love to hear from you</h2>
             <p>
@@ -813,9 +806,7 @@
             </aside>
           </aside>
 
-          <!-- Forms -->
           <div class="connect-right">
-            <!-- Tab switcher -->
             <div class="tabs" role="tablist" aria-label="Contact form options">
               <button
                 class="tab-btn active"
@@ -839,7 +830,6 @@
               </button>
             </div>
 
-            <!-- Enquiry form -->
             <div
               id="tab-enquiry"
               class="tab-panel active"
@@ -940,7 +930,6 @@
               </div>
             </div>
 
-            <!-- Newsletter form -->
             <div
               id="tab-newsletter"
               class="tab-panel"
@@ -1031,8 +1020,8 @@
     </main>
 
     <!-- ════════════════════════════════
-       FOOTER
-  ════════════════════════════════ -->
+         FOOTER
+    ════════════════════════════════ -->
     <footer role="contentinfo">
       <div class="footer-top">
         <div class="footer-brand">
@@ -1082,5 +1071,6 @@
 
     <!-- ── Scripts ── -->
     <script src="script.js"></script>
+    <script src="components/welcome-popup.js"></script>
   </body>
 </html>
