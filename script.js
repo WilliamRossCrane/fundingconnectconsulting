@@ -2,21 +2,13 @@
  * Funding Connect Consulting — script.js
  *
  * Responsibilities:
- *   - SPA-style page routing (showPage)
+ *   - SPA page routing (showPage)
  *   - Connect page tab switching
  *   - Enquiry & newsletter form handling
- *   - Grants ticker (slider) population
- *   - Footer year auto-update
- *   - Mobile hamburger nav toggle
+ *   - Grants ticker population
  *
- * Form backend notes:
- *   The enquiry and newsletter forms currently show a success message client-side
- *   only. To make them functional, connect them to a backend such as:
- *     - Formspree  → https://formspree.io  (easiest, no-code)
- *     - Vercel Serverless Function  → /api/enquiry.js or /api/newsletter.js
- *     - EmailJS  → https://www.emailjs.com
- *   See the submitEnquiry() and submitNewsletter() functions below for the
- *   placeholder fetch() calls you can wire up.
+ * Note: navbar, footer year, mobile nav toggle, and the welcome popup
+ * are each handled by their own files in /components/.
  */
 
 "use strict";
@@ -26,8 +18,8 @@
 ───────────────────────────────────────────── */
 
 /**
- * Show a named page and update the nav active state.
- * @param {string} pageId  One of: 'home' | 'about' | 'services' | 'connect'
+ * Show a named page.
+ * @param {string} pageId  'home' | 'about' | 'services' | 'connect'
  */
 function showPage(pageId) {
   // Hide all pages
@@ -35,26 +27,14 @@ function showPage(pageId) {
     el.classList.remove("active");
   });
 
-  // Show the requested page
+  // Show requested page
   var target = document.getElementById("page-" + pageId);
-  if (target) {
-    target.classList.add("active");
+  if (target) target.classList.add("active");
+
+  // Delegate active link state to navbar component
+  if (typeof window.setActiveNavLink === "function") {
+    window.setActiveNavLink(pageId);
   }
-
-  // Update nav link active state + aria-current
-  document.querySelectorAll(".nav-links a").forEach(function (link) {
-    link.classList.remove("active");
-    link.removeAttribute("aria-current");
-  });
-
-  var activeLink = document.getElementById("nav-" + pageId);
-  if (activeLink) {
-    activeLink.classList.add("active");
-    activeLink.setAttribute("aria-current", "page");
-  }
-
-  // Close mobile nav if open
-  closeMobileNav();
 
   // Scroll to top
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -65,29 +45,22 @@ function showPage(pageId) {
 ───────────────────────────────────────────── */
 
 /**
- * Switch between the Enquiry and Newsletter tabs.
- * @param {string} tabId   One of: 'enquiry' | 'newsletter'
- * @param {HTMLElement} clickedBtn  The button that was clicked
+ * @param {string} tabId        'enquiry' | 'newsletter'
+ * @param {HTMLElement} clickedBtn
  */
 function switchTab(tabId, clickedBtn) {
-  // Hide all tab panels
   document.querySelectorAll(".tab-panel").forEach(function (panel) {
     panel.classList.remove("active");
   });
 
-  // Deactivate all tab buttons
   document.querySelectorAll(".tab-btn").forEach(function (btn) {
     btn.classList.remove("active");
     btn.setAttribute("aria-selected", "false");
   });
 
-  // Activate the selected panel
   var panel = document.getElementById("tab-" + tabId);
-  if (panel) {
-    panel.classList.add("active");
-  }
+  if (panel) panel.classList.add("active");
 
-  // Activate the clicked button
   clickedBtn.classList.add("active");
   clickedBtn.setAttribute("aria-selected", "true");
 }
@@ -96,10 +69,6 @@ function switchTab(tabId, clickedBtn) {
    Form helpers
 ───────────────────────────────────────────── */
 
-/**
- * Display a success message, then hide it after 5 seconds.
- * @param {string} elementId  ID of the .form-success element
- */
 function showSuccess(elementId) {
   var el = document.getElementById(elementId);
   if (!el) return;
@@ -109,10 +78,6 @@ function showSuccess(elementId) {
   }, 5000);
 }
 
-/**
- * Clear a list of form field values.
- * @param {string[]} ids  Array of element IDs to reset
- */
 function clearFields(ids) {
   ids.forEach(function (id) {
     var el = document.getElementById(id);
@@ -121,22 +86,14 @@ function clearFields(ids) {
 }
 
 /* ─────────────────────────────────────────────
-   Enquiry form submission
+   Enquiry form
 ───────────────────────────────────────────── */
 
 /**
- * Handle the enquiry form submit button click.
- *
  * TO CONNECT A REAL BACKEND:
- *   1. Formspree (simplest):
- *      - Sign up at https://formspree.io, create a form, get your endpoint URL.
- *      - Replace the fetch() URL below with your Formspree endpoint.
- *      - Set method: 'POST' and pass a FormData or JSON body.
- *
- *   2. Vercel Serverless Function:
- *      - Create /api/enquiry.js in your project.
- *      - Change the fetch URL to '/api/enquiry'.
- *      - The function receives the POST body and forwards it (e.g. via SendGrid/Resend).
+ *   Formspree — replace the fetch URL with your Formspree endpoint.
+ *   Vercel    — POST to /api/enquiry.js
+ *   EmailJS   — https://www.emailjs.com
  */
 function submitEnquiry() {
   var name = document.getElementById("e-name").value.trim();
@@ -147,20 +104,18 @@ function submitEnquiry() {
     return;
   }
 
-  /* ── Uncomment and configure to connect a real backend ──
-  var payload = {
-    name:         name,
-    organisation: document.getElementById('e-org').value.trim(),
-    email:        email,
-    phone:        document.getElementById('e-phone').value.trim(),
-    service:      document.getElementById('e-service').value,
-    message:      document.getElementById('e-msg').value.trim(),
-  };
-
+  /* ── Uncomment to connect a real backend ──
   fetch('https://formspree.io/f/YOUR_FORM_ID', {
     method:  'POST',
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-    body:    JSON.stringify(payload),
+    body: JSON.stringify({
+      name:         name,
+      organisation: document.getElementById('e-org').value.trim(),
+      email:        email,
+      phone:        document.getElementById('e-phone').value.trim(),
+      service:      document.getElementById('e-service').value,
+      message:      document.getElementById('e-msg').value.trim(),
+    }),
   })
     .then(function (res) {
       if (!res.ok) throw new Error('Network error');
@@ -168,26 +123,21 @@ function submitEnquiry() {
       showSuccess('e-success');
     })
     .catch(function () {
-      alert('Something went wrong. Please try emailing us directly at hello@fundingconnect.com.au');
+      alert('Something went wrong. Please email us at hello@fundingconnect.com.au');
     });
   */
 
-  // ── Placeholder behaviour (remove once real backend is wired up) ──
   clearFields(["e-name", "e-org", "e-email", "e-phone", "e-service", "e-msg"]);
   showSuccess("e-success");
 }
 
 /* ─────────────────────────────────────────────
-   Newsletter form submission
+   Newsletter form
 ───────────────────────────────────────────── */
 
 /**
- * Handle the newsletter subscribe button click.
- *
  * TO CONNECT A REAL BACKEND:
- *   - Mailchimp: use their embedded form or the Mailchimp API.
- *   - ConvertKit: POST to their subscribe endpoint.
- *   - Vercel Serverless Function: /api/newsletter.js
+ *   Mailchimp / ConvertKit / Vercel Serverless Function
  */
 function submitNewsletter() {
   var name = document.getElementById("n-name").value.trim();
@@ -198,18 +148,16 @@ function submitNewsletter() {
     return;
   }
 
-  /* ── Uncomment and configure to connect a real backend ──
-  var payload = {
-    name:         name,
-    email:        email,
-    organisation: document.getElementById('n-org').value.trim(),
-    state:        document.getElementById('n-state').value,
-  };
-
-  fetch('/api/newsletter', {         // or your Mailchimp/ConvertKit endpoint
+  /* ── Uncomment to connect a real backend ──
+  fetch('/api/newsletter', {
     method:  'POST',
     headers: { 'Content-Type': 'application/json' },
-    body:    JSON.stringify(payload),
+    body: JSON.stringify({
+      name:         name,
+      email:        email,
+      organisation: document.getElementById('n-org').value.trim(),
+      state:        document.getElementById('n-state').value,
+    }),
   })
     .then(function (res) {
       if (!res.ok) throw new Error('Network error');
@@ -221,7 +169,6 @@ function submitNewsletter() {
     });
   */
 
-  // ── Placeholder behaviour ──
   clearFields(["n-name", "n-email", "n-org", "n-state"]);
   showSuccess("n-success");
 }
@@ -230,11 +177,6 @@ function submitNewsletter() {
    Grants slider
 ───────────────────────────────────────────── */
 
-/**
- * Grant opportunity data.
- * Update these entries whenever new grants are available.
- * Dates have been set to 2026 so the page doesn't appear expired.
- */
 var GRANTS = [
   {
     cat: "Health & Wellbeing",
@@ -286,15 +228,11 @@ var GRANTS = [
   },
 ];
 
-/**
- * Build the grants slider by duplicating the cards for a seamless loop.
- */
 function buildGrantsSlider() {
   var track = document.getElementById("grants-track");
   if (!track) return;
 
-  // Duplicate the list so the CSS animation creates a seamless infinite loop
-  var allGrants = GRANTS.concat(GRANTS);
+  var allGrants = GRANTS.concat(GRANTS); // duplicate for seamless loop
 
   track.innerHTML = allGrants
     .map(function (g) {
@@ -310,11 +248,6 @@ function buildGrantsSlider() {
     .join("");
 }
 
-/**
- * Basic HTML-escape to avoid XSS when inserting data into innerHTML.
- * @param {string} str
- * @returns {string}
- */
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -325,73 +258,8 @@ function escapeHtml(str) {
 }
 
 /* ─────────────────────────────────────────────
-   Footer year
-───────────────────────────────────────────── */
-
-/**
- * Keep the footer copyright year current automatically.
- */
-function setFooterYear() {
-  var el = document.getElementById("footer-year");
-  if (el) {
-    el.textContent = new Date().getFullYear();
-  }
-}
-
-/* ─────────────────────────────────────────────
-   Mobile hamburger nav
-───────────────────────────────────────────── */
-
-/**
- * Close the mobile nav drawer.
- */
-function closeMobileNav() {
-  var toggle = document.getElementById("nav-toggle");
-  var navLinks = document.getElementById("nav-links");
-  if (!toggle || !navLinks) return;
-  toggle.classList.remove("open");
-  navLinks.classList.remove("open");
-  toggle.setAttribute("aria-expanded", "false");
-}
-
-/**
- * Initialise the mobile hamburger toggle.
- * Opens/closes the nav drawer; also closes on outside tap or Escape key.
- */
-function initMobileNav() {
-  var toggle = document.getElementById("nav-toggle");
-  var navLinks = document.getElementById("nav-links");
-  if (!toggle || !navLinks) return;
-
-  toggle.addEventListener("click", function () {
-    var isOpen = navLinks.classList.contains("open");
-    if (isOpen) {
-      closeMobileNav();
-    } else {
-      toggle.classList.add("open");
-      navLinks.classList.add("open");
-      toggle.setAttribute("aria-expanded", "true");
-    }
-  });
-
-  // Close on outside tap
-  document.addEventListener("click", function (e) {
-    if (!toggle.contains(e.target) && !navLinks.contains(e.target)) {
-      closeMobileNav();
-    }
-  });
-
-  // Close on Escape key
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") closeMobileNav();
-  });
-}
-
-/* ─────────────────────────────────────────────
-   Initialise on DOM ready
+   Init
 ───────────────────────────────────────────── */
 document.addEventListener("DOMContentLoaded", function () {
   buildGrantsSlider();
-  setFooterYear();
-  initMobileNav();
 });
