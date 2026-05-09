@@ -5,7 +5,6 @@
  *   - SPA page routing (showPage)
  *   - Connect page tab switching
  *   - Enquiry & newsletter form handling
- *   - Grants ticker population
  *
  * Note: navbar, footer year, mobile nav toggle, and the welcome popup
  * are each handled by their own files in /components/.
@@ -172,94 +171,3 @@ function submitNewsletter() {
   clearFields(["n-name", "n-email", "n-org", "n-state"]);
   showSuccess("n-success");
 }
-
-/* ─────────────────────────────────────────────
-   Grants slider
-───────────────────────────────────────────── */
-
-var GRANTS = [
-  {
-    cat: "Health & Wellbeing",
-    title: "Indigenous Health & Wellbeing Fund",
-    amount: "Up to $150,000",
-    close: "Closes 30 Jun 2026",
-  },
-  {
-    cat: "Education",
-    title: "First Nations Education Support Grants",
-    amount: "Up to $80,000",
-    close: "Closes 15 Jul 2026",
-  },
-  {
-    cat: "Economic Development",
-    title: "Indigenous Business Australia – Growth Fund",
-    amount: "$50,000 – $500,000",
-    close: "Open rolling",
-  },
-  {
-    cat: "Housing",
-    title: "Remote Housing Infrastructure Program",
-    amount: "Up to $2,000,000",
-    close: "Closes 1 Aug 2026",
-  },
-  {
-    cat: "Culture & Arts",
-    title: "AIATSIS Community Heritage Grants",
-    amount: "Up to $30,000",
-    close: "Closes 20 Jul 2026",
-  },
-  {
-    cat: "Youth",
-    title: "Strong Communities Youth Development",
-    amount: "Up to $120,000",
-    close: "Closes 31 Aug 2026",
-  },
-  {
-    cat: "Environment",
-    title: "Land & Sea Country Ranger Program",
-    amount: "Up to $250,000",
-    close: "Open rolling",
-  },
-  {
-    cat: "Governance",
-    title: "Governance & Capability Support Fund",
-    amount: "Up to $60,000",
-    close: "Closes 14 Sep 2026",
-  },
-];
-
-function buildGrantsSlider() {
-  var track = document.getElementById("grants-track");
-  if (!track) return;
-
-  var allGrants = GRANTS.concat(GRANTS); // duplicate for seamless loop
-
-  track.innerHTML = allGrants
-    .map(function (g) {
-      return [
-        '<article class="grant-card" role="listitem">',
-        '  <p class="grant-cat">' + escapeHtml(g.cat) + "</p>",
-        '  <p class="grant-title">' + escapeHtml(g.title) + "</p>",
-        '  <p class="grant-amount">' + escapeHtml(g.amount) + "</p>",
-        '  <p class="grant-close">' + escapeHtml(g.close) + "</p>",
-        "</article>",
-      ].join("\n");
-    })
-    .join("");
-}
-
-function escapeHtml(str) {
-  return String(str)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
-}
-
-/* ─────────────────────────────────────────────
-   Init
-───────────────────────────────────────────── */
-document.addEventListener("DOMContentLoaded", function () {
-  buildGrantsSlider();
-});
