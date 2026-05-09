@@ -1,0 +1,22 @@
+/* ============================================================
+   Funding Connect Consulting — main.css
+   ------------------------------------------------------------
+   This file controls stylesheet load order. Keep design tokens
+   and base styles first, then layout/components/pages, then
+   animations and responsive overrides.
+   ============================================================ */
+
+@import "./tokens.css";
+@import "./base.css";
+@import "./utilities.css";
+@import "./navigation.css";
+@import "./layout.css";
+@import "./home.css";
+@import "./page-banner.css";
+@import "./about.css";
+@import "./services.css";
+@import "./connect.css";
+@import "./forms.css";
+@import "./footer.css";
+@import "./animations.css";
+@import "./responsive.css";

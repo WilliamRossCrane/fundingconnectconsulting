@@ -1,0 +1,115 @@
+/* Funding Connect Consulting — forms.css */
+
+/* ─────────────────────────────────────────────
+   13. Forms
+───────────────────────────────────────────── */
+/* Tabs */
+.tabs {
+  display: flex;
+  margin-bottom: 28px;
+  border-bottom: 2px solid var(--pale);
+}
+
+.tab-btn {
+  padding: 10px 20px;
+  font-family: "Mulish", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  cursor: pointer;
+  color: #888;
+  transition:
+    color 0.2s,
+    border-color 0.2s;
+}
+
+.tab-btn.active,
+.tab-btn[aria-selected="true"] {
+  color: var(--deep);
+  border-bottom-color: var(--deep);
+}
+
+.tab-panel {
+  display: none;
+}
+.tab-panel.active {
+  display: block;
+}
+
+/* Field */
+.field {
+  margin-bottom: 14px;
+}
+
+.field label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--dark);
+  margin-bottom: 5px;
+}
+
+.field label span[aria-label="required"] {
+  color: var(--gold);
+  margin-left: 2px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #ddd;
+  border-radius: 3px;
+  font-family: "Mulish", sans-serif;
+  font-size: 13px;
+  color: var(--dark);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.2s;
+  appearance: none;
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--deep);
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 90px;
+}
+
+/* Newsletter intro text */
+.newsletter-intro {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.form-note {
+  font-size: 11px;
+  color: #aaa;
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+/* Success message (hidden by default, shown via JS) */
+.form-success {
+  display: none;
+  background: var(--deep);
+  color: var(--white);
+  padding: 13px 18px;
+  border-radius: 3px;
+  font-size: 13px;
+  text-align: center;
+  margin-top: 12px;
+}

@@ -1,0 +1,14 @@
+/* Funding Connect Consulting — layout.css */
+
+/* ─────────────────────────────────────────────
+   5. Page shell
+───────────────────────────────────────────── */
+.page {
+  display: none;
+  padding-top: var(--nav-height);
+  min-height: 100vh;
+}
+
+.page.active {
+  display: block;
+}

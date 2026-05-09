@@ -1,0 +1,61 @@
+/* Funding Connect Consulting — utilities.css */
+
+/* ─────────────────────────────────────────────
+   3. Layout utilities
+───────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 3px;
+  font-family: "Mulish", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.btn-white {
+  background: var(--white);
+  color: var(--deep);
+}
+.btn-white:hover {
+  background: var(--cream);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--white);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+.btn-outline:hover {
+  border-color: var(--white);
+}
+
+.btn-deep {
+  background: var(--deep);
+  color: var(--white);
+}
+.btn-deep:hover {
+  background: var(--mid);
+}
+
+.btn-gold {
+  background: var(--gold);
+  color: var(--white);
+}
+.btn-gold:hover {
+  background: #b87a2e;
+}
+
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
