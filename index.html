@@ -82,14 +82,14 @@
           <div class="hero-actions">
             <button
               class="btn btn-white"
-              onclick="showPage('connect')"
+              data-page-link="connect"
               aria-label="Get in touch with us"
             >
               Get in Touch
             </button>
             <button
               class="btn btn-outline"
-              onclick="showPage('about')"
+              data-page-link="about"
               aria-label="Learn about our approach"
             >
               Our Approach
@@ -119,7 +119,7 @@
               established program, we walk alongside you every step of the way.
               <a
                 href="#"
-                onclick="showPage('about')"
+                data-page-link="about"
                 aria-label="Learn more about Funding Connect Consulting"
                 >Learn more about us →</a
               >
@@ -236,7 +236,7 @@
                 id="tab-btn-enquiry"
                 aria-selected="true"
                 aria-controls="tab-enquiry"
-                onclick="switchTab('enquiry', this)"
+                data-tab="enquiry"
               >
                 Submit Enquiry
               </button>
@@ -246,7 +246,7 @@
                 id="tab-btn-newsletter"
                 aria-selected="false"
                 aria-controls="tab-newsletter"
-                onclick="switchTab('newsletter', this)"
+                data-tab="newsletter"
               >
                 Newsletter
               </button>
@@ -337,7 +337,7 @@
               <button
                 type="button"
                 class="btn btn-deep btn-full"
-                onclick="submitEnquiry()"
+                data-submit-form="enquiry"
                 aria-label="Send your enquiry"
               >
                 Send Enquiry →
@@ -419,7 +419,7 @@
               <button
                 type="button"
                 class="btn btn-gold btn-full"
-                onclick="submitNewsletter()"
+                data-submit-form="newsletter"
                 aria-label="Subscribe to the newsletter"
               >
                 Subscribe →
@@ -446,7 +446,7 @@
     ════════════════════════════════ -->
     <div id="footer-placeholder"></div>
 
-    <!-- ── Scripts — components load first, then app logic ── -->
+    <!-- ── Component scripts ── -->
     <script src="components/navbar.js"></script>
     <script src="components/footer.js"></script>
     <script src="components/dom.js"></script>
@@ -459,6 +459,12 @@
     <script src="components/process-steps.js"></script>
     <script src="components/contact-info.js"></script>
     <script src="components/welcome-popup.js"></script>
-    <script src="script.js"></script>
+
+    <!-- ── App behaviour scripts ── -->
+    <script src="scripts/utils.js"></script>
+    <script src="scripts/router.js"></script>
+    <script src="scripts/tabs.js"></script>
+    <script src="scripts/forms.js"></script>
+    <script src="scripts/app.js"></script>
   </body>
 </html>
