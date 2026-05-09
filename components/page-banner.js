@@ -24,15 +24,16 @@
 
   function renderPageBanner(config) {
     var content = window.FCC_CONTENT.pageBanners[config.key];
+    var escapeHtml = window.FundingConnectComponents.escapeHtml;
     if (!content) return;
 
     window.FundingConnectComponents.setHtml(
       config.targetId,
       [
         '<div class="page-banner">',
-        '  <p class="tag" aria-hidden="true">' + content.tag + "</p>",
+        '  <p class="tag" aria-hidden="true">' + escapeHtml(content.tag) + "</p>",
         "  <h1>" + content.heading + "</h1>",
-        "  <p>" + content.text + "</p>",
+        "  <p>" + escapeHtml(content.text) + "</p>",
         "</div>",
       ].join("\n"),
     );

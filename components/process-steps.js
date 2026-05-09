@@ -20,14 +20,16 @@
   }
 
   function renderProcessSteps() {
+    var section = window.FCC_CONTENT.processSection || {};
     var steps = window.FCC_CONTENT.processSteps || [];
+    var escapeHtml = window.FundingConnectComponents.escapeHtml
 
     window.FundingConnectComponents.setHtml(
       "process-steps-placeholder",
       [
         '<section class="process" aria-labelledby="process-heading">',
-        '  <h2 id="process-heading">How we work</h2>',
-        '  <ol class="steps" aria-label="Our four-step process">',
+        '  <h2 id="process-heading">' + escapeHtml(section.heading || 'How we work') + '</h2>',
+        '  <ol class="steps" aria-label="' + escapeHtml(section.ariaLabel || 'Our four-step process') + '">',
         steps.map(renderStep).join("\n"),
         "  </ol>",
         "</section>",

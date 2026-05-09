@@ -13,7 +13,7 @@
       "about-acknowledgement-placeholder",
       [
         '<aside class="ack" aria-label="Acknowledgement of Country">',
-        "  <h4>Acknowledgement of Country</h4>",
+        "  <h4>" + escapeHtml(acknowledgements.title || "Acknowledgement of Country") + "</h4>",
         "  <p>",
         "    " + escapeHtml(acknowledgements.full || ""),
         "  </p>",
@@ -30,7 +30,7 @@
       "connect-acknowledgement-placeholder",
       [
         '<aside class="ack-small" aria-label="Acknowledgement of Country">',
-        "  <strong>Acknowledgement of Country</strong>",
+        "  <strong>" + escapeHtml(acknowledgements.title || "Acknowledgement of Country") + "</strong>",
         "  <p>",
         "    " + escapeHtml(acknowledgements.short || ""),
         "  </p>",

@@ -40,12 +40,14 @@
   }
 
   function renderPillars() {
+    var section = window.FCC_CONTENT.pillarsSection || {};
     var pillars = window.FCC_CONTENT.pillars || [];
+    var escapeHtml = window.FundingConnectComponents.escapeHtml
 
     window.FundingConnectComponents.setHtml(
       "pillars-placeholder",
       [
-        '<ul class="pillars-row" role="list" aria-label="Our three pillars">',
+        '<ul class="pillars-row" role="list" aria-label="' + escapeHtml(section.ariaLabel || 'Our three pillars') + '">',
         pillars.map(renderPillar).join("\n"),
         "</ul>",
       ].join("\n"),

@@ -1,30 +1,40 @@
 /**
  * Funding Connect Consulting — site-content.js
  *
- * Placeholder site content used by the page section components.
- * Update this file when the copy/content changes, instead of editing component
- * rendering logic directly.
+ * Central placeholder content for the static site.
+ *
+ * Keep this file focused on words, labels, placeholder options and simple
+ * content configuration. Components should handle markup/rendering only.
  */
 
 "use strict";
 
 window.FCC_CONTENT = {
-  pageBanners: {
-    about: {
-      tag: "Who We Are",
-      heading: "Built on Connection,<br />Trust &amp; Impact",
-      text: "A consulting practice dedicated to strengthening Aboriginal and Torres Strait Islander organisations across Australia.",
-    },
-    services: {
-      tag: "What We Do",
-      heading: "Our Services",
-      text: "Specialist consulting designed around the unique needs and aspirations of Aboriginal and Torres Strait Islander communities.",
-    },
-    connect: {
-      tag: "Get in Touch",
-      heading: "Let's Connect",
-      text: "Whether you're starting your funding journey or need specialist support, we're here to help.",
-    },
+  homeHero: {
+    tag: "First Nations Funding Specialists",
+    heading: "Connecting <em>communities</em><br />with funding that matters",
+    text: "We support Aboriginal and Torres Strait Islander organisations to access funding opportunities and design programs that create lasting impact — led by community, for community.",
+    actions: [
+      {
+        label: "Get in Touch",
+        page: "connect",
+        className: "btn btn-white",
+        ariaLabel: "Get in touch with us",
+      },
+      {
+        label: "Our Approach",
+        page: "about",
+        className: "btn btn-outline",
+        ariaLabel: "Learn about our approach",
+      },
+    ],
+  },
+
+  grantsSection: {
+    heading: "Recent Grant Opportunities",
+    status: "Updated regularly",
+    statusAriaLabel: "This section is updated regularly",
+    trackAriaLabel: "Scrolling grant opportunities — hover to pause",
   },
 
   grants: [
@@ -78,6 +88,52 @@ window.FCC_CONTENT = {
     },
   ],
 
+  homeBlurb: {
+    heading: "Specialist support for First Nations organisations",
+    paragraphs: [
+      "Funding Connect Consulting was founded to ensure Aboriginal and Torres Strait Islander organisations have the expert support they need to secure funding and deliver meaningful programs.",
+      "We bring deep knowledge of the funding landscape — government, philanthropic and corporate — combined with genuine respect for community-led decision making and cultural values.",
+    ],
+    finalParagraph: "Whether you're searching for your first grant or scaling an established program, we walk alongside you every step of the way.",
+    link: {
+      label: "Learn more about us →",
+      page: "about",
+      ariaLabel: "Learn more about Funding Connect Consulting",
+    },
+    missionCard: {
+      quote: "Bridging funding with the meaningful work of Aboriginal and Torres Strait Islander communities.",
+      cite: "Our Mission",
+    },
+  },
+
+  pageBanners: {
+    about: {
+      tag: "Who We Are",
+      heading: "Built on Connection,<br />Trust &amp; Impact",
+      text: "A consulting practice dedicated to strengthening Aboriginal and Torres Strait Islander organisations across Australia.",
+    },
+    services: {
+      tag: "What We Do",
+      heading: "Our Services",
+      text: "Specialist consulting designed around the unique needs and aspirations of Aboriginal and Torres Strait Islander communities.",
+    },
+    connect: {
+      tag: "Get in Touch",
+      heading: "Let's Connect",
+      text: "Whether you're starting your funding journey or need specialist support, we're here to help.",
+    },
+  },
+
+  aboutIntro: [
+    "Funding Connect Consulting was founded with one purpose — to ensure Aboriginal and Torres Strait Islander organisations have the expert support they need to access funding and deliver programs that truly serve their communities.",
+    "We understand that funding is not just about dollars. It is about enabling self-determination, preserving culture, and creating change that is led by community, for community.",
+    "Our team brings together deep experience in grant writing, program design, stakeholder engagement and evaluation — all grounded in genuine respect for First Nations peoples and their ways of working.",
+  ],
+
+  valuesSection: {
+    heading: "Our Values",
+  },
+
   values: [
     {
       title: "Self-Determination",
@@ -101,6 +157,10 @@ window.FCC_CONTENT = {
     },
   ],
 
+  pillarsSection: {
+    ariaLabel: "Our three pillars",
+  },
+
   pillars: [
     {
       title: "Connection",
@@ -118,6 +178,16 @@ window.FCC_CONTENT = {
       icon: "shield",
     },
   ],
+
+  acknowledgements: {
+    title: "Acknowledgement of Country",
+    full: "We acknowledge the Traditional Custodians of Country throughout Australia and recognise their continuing connection to Land, Water and Community. We pay our respects to Elders past, present and emerging.",
+    short: "We acknowledge the Traditional Custodians of Country throughout Australia and their continuing connection to Land, Water and Community.",
+  },
+
+  servicesSection: {
+    ariaLabel: "Our services",
+  },
 
   services: [
     {
@@ -152,6 +222,11 @@ window.FCC_CONTENT = {
     },
   ],
 
+  processSection: {
+    heading: "How we work",
+    ariaLabel: "Our four-step process",
+  },
+
   processSteps: [
     {
       number: "01",
@@ -175,6 +250,11 @@ window.FCC_CONTENT = {
     },
   ],
 
+  contactIntro: {
+    heading: "We'd love to hear from you",
+    text: "Reach out and a member of our team will respond within 2 business days.",
+  },
+
   contactInfo: [
     {
       label: "Email",
@@ -195,8 +275,136 @@ window.FCC_CONTENT = {
     },
   ],
 
-  acknowledgements: {
-    full: "We acknowledge the Traditional Custodians of Country throughout Australia and recognise their continuing connection to Land, Water and Community. We pay our respects to Elders past, present and emerging.",
-    short: "We acknowledge the Traditional Custodians of Country throughout Australia and their continuing connection to Land, Water and Community.",
+  contactForms: {
+    tabsAriaLabel: "Contact form options",
+    tabs: [
+      {
+        id: "enquiry",
+        label: "Submit Enquiry",
+      },
+      {
+        id: "newsletter",
+        label: "Newsletter",
+      },
+    ],
+
+    enquiry: {
+      successMessage: "✓ Thanks! We'll be in touch within 2 business days.",
+      submitLabel: "Send Enquiry →",
+      submitAriaLabel: "Send your enquiry",
+      fields: [
+        {
+          id: "e-name",
+          label: "Full Name",
+          type: "text",
+          name: "name",
+          placeholder: "Your name",
+          autocomplete: "name",
+          required: true,
+        },
+        {
+          id: "e-org",
+          label: "Organisation",
+          type: "text",
+          name: "organisation",
+          placeholder: "Organisation name",
+          autocomplete: "organization",
+          required: true,
+        },
+        {
+          id: "e-email",
+          label: "Email",
+          type: "email",
+          name: "email",
+          placeholder: "your@email.com",
+          autocomplete: "email",
+          required: true,
+        },
+        {
+          id: "e-phone",
+          label: "Phone",
+          type: "tel",
+          name: "phone",
+          placeholder: "(07) XXXX XXXX",
+          autocomplete: "tel",
+        },
+        {
+          id: "e-service",
+          label: "Service Interested In",
+          type: "select",
+          name: "service",
+          placeholder: "Select a service...",
+          options: [
+            { value: "funding-identification", label: "Funding Identification" },
+            { value: "grant-writing", label: "Grant Writing" },
+            { value: "program-design", label: "Program Design" },
+            { value: "stakeholder-engagement", label: "Stakeholder Engagement" },
+            { value: "monitoring-evaluation", label: "Monitoring & Evaluation" },
+            { value: "capacity-building", label: "Capacity Building" },
+            { value: "not-sure", label: "Not sure yet" },
+          ],
+        },
+        {
+          id: "e-msg",
+          label: "Tell us about your needs",
+          type: "textarea",
+          name: "message",
+          placeholder: "Briefly describe your organisation and what you're hoping to achieve...",
+        },
+      ],
+    },
+
+    newsletter: {
+      intro: "Stay informed on funding opportunities, sector news and resources for First Nations organisations. Delivered monthly.",
+      note: "By subscribing you agree to receive our monthly newsletter. Unsubscribe anytime.",
+      successMessage: "✓ Welcome! You're now subscribed.",
+      submitLabel: "Subscribe →",
+      submitAriaLabel: "Subscribe to the newsletter",
+      fields: [
+        {
+          id: "n-name",
+          label: "Full Name",
+          type: "text",
+          name: "name",
+          placeholder: "Your name",
+          autocomplete: "name",
+          required: true,
+        },
+        {
+          id: "n-email",
+          label: "Email",
+          type: "email",
+          name: "email",
+          placeholder: "your@email.com",
+          autocomplete: "email",
+          required: true,
+        },
+        {
+          id: "n-org",
+          label: "Organisation",
+          type: "text",
+          name: "organisation",
+          placeholder: "Optional",
+          autocomplete: "organization",
+        },
+        {
+          id: "n-state",
+          label: "State / Territory",
+          type: "select",
+          name: "state",
+          placeholder: "Select...",
+          options: [
+            { value: "QLD", label: "QLD" },
+            { value: "NSW", label: "NSW" },
+            { value: "VIC", label: "VIC" },
+            { value: "WA", label: "WA" },
+            { value: "SA", label: "SA" },
+            { value: "NT", label: "NT" },
+            { value: "TAS", label: "TAS" },
+            { value: "ACT", label: "ACT" },
+          ],
+        },
+      ],
+    },
   },
 };

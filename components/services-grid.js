@@ -61,12 +61,14 @@
   }
 
   function renderServicesGrid() {
+    var section = window.FCC_CONTENT.servicesSection || {};
     var services = window.FCC_CONTENT.services || [];
+    var escapeHtml = window.FundingConnectComponents.escapeHtml
 
     window.FundingConnectComponents.setHtml(
       "services-grid-placeholder",
       [
-        '<ul class="services-grid" role="list" aria-label="Our services">',
+        '<ul class="services-grid" role="list" aria-label="' + escapeHtml(section.ariaLabel || 'Our services') + '">',
         services.map(renderService).join("\n"),
         "</ul>",
       ].join("\n"),
