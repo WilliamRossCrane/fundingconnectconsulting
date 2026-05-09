@@ -62,7 +62,7 @@ Future updates will include:
 **HTML** – Website structure and content  
 **CSS** – Styling, layout, responsive design and animations  
 **JavaScript** – Page switching, tabs, form interactions and grants slider  
-**Vercel** – Static website deployment  
+**Vercel** – Static website deployment
 
 ---
 
@@ -106,13 +106,69 @@ This project is helping me practise:
 ```bash
 funding-connect-consulting/
 ├── index.html
-├── styles.css
-├── script.js
 ├── vercel.json
+├── README.md
+├── .editorconfig
+├── .gitignore
+├── .prettierrc
+│
 ├── assets/
+│   ├── icons/
+│   │   ├── favicon.svg
+│   │   ├── favicon.png
+│   │   └── apple-touch-icon.png
+│   │
 │   └── images/
-└── README.md
+│       └── og-image.png
+│
+├── components/
+│   ├── acknowledgement.js
+│   ├── about-intro.js
+│   ├── contact-forms.js
+│   ├── contact-info.js
+│   ├── contact-sidebar.js
+│   ├── dom.js
+│   ├── footer.js
+│   ├── grants-carousel.js
+│   ├── home-blurb.js
+│   ├── home-hero.js
+│   ├── navbar.js
+│   ├── page-banner.js
+│   ├── pillars.js
+│   ├── process-steps.js
+│   ├── services-grid.js
+│   ├── values.js
+│   ├── welcome-popup.js
+│   └── welcome-popup.css
+│
+├── data/
+│   └── site-content.js
+│
+├── scripts/
+│   ├── app.js
+│   ├── forms.js
+│   ├── router.js
+│   ├── tabs.js
+│   └── utils.js
+│
+└── styles/
+    ├── main.css
+    ├── tokens.css
+    ├── base.css
+    ├── utilities.css
+    ├── navigation.css
+    ├── layout.css
+    ├── home.css
+    ├── page-banner.css
+    ├── about.css
+    ├── services.css
+    ├── connect.css
+    ├── forms.css
+    ├── footer.css
+    ├── animations.css
+    └── responsive.css
 ```
+
 ---
 
 # 🔒 Usage & Content Notice
