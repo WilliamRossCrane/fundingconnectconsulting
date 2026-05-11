@@ -291,6 +291,7 @@ window.FCC_CONTENT = {
     ],
 
     enquiry: {
+      // Replace this Formspree endpoint if you move the enquiry form to a new inbox.
       formAction: "https://formspree.io/f/mdabygob",
       formMethod: "POST",
       embedHeading: "Start your enquiry",
@@ -305,11 +306,6 @@ window.FCC_CONTENT = {
           type: "hidden",
           name: "_subject",
           value: "New Funding Connect Consulting enquiry",
-        },
-        {
-          type: "hidden",
-          name: "_next",
-          value: "",
         },
         {
           type: "hidden",

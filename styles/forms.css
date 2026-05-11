@@ -232,6 +232,22 @@
   line-height: 1.6;
 }
 
+.newsletter-mailchimp .response.is-pending {
+  color: #5f5f5f;
+}
+
+.newsletter-mailchimp .response.is-success {
+  color: var(--deep);
+}
+
+.newsletter-mailchimp .response.is-error {
+  color: #9f2d2d;
+}
+
+.newsletter-mailchimp .response a {
+  color: inherit;
+}
+
 @media (max-width: 640px) {
   .contact-form-grid {
     grid-template-columns: 1fr;
@@ -277,6 +293,24 @@
 
 .form-success-banner.is-visible {
   display: block;
+}
+
+.form-status {
+  margin-top: 14px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.form-status.is-pending {
+  color: #5f5f5f;
+}
+
+.form-status.is-success {
+  color: var(--deep);
+}
+
+.form-status.is-error {
+  color: #9f2d2d;
 }
 
 .contact-form .btn {

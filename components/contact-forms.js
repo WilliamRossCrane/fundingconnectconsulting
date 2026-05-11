@@ -15,7 +15,6 @@
     '    id="mc-embedded-subscribe-form"',
     '    name="mc-embedded-subscribe-form"',
     '    class="newsletter-mailchimp-form"',
-    '    target="_blank"',
     '    novalidate',
     "  >",
     '    <div class="newsletter-mailchimp-grid">',
@@ -188,6 +187,11 @@
     var formAction = config.formAction || "";
     var formMethod = config.formMethod || "POST";
     var hasForm = Array.isArray(config.fields) && config.fields.length > 0;
+    var formId = panelId === "enquiry" ? ' id="contact-form"' : "";
+    var statusMarkup =
+      panelId === "enquiry"
+        ? '<p id="contact-form-status" class="form-status" aria-live="polite"></p>'
+        : "";
     var noteText = (options && options.note) || config.note || "";
     var note = noteText ? '<p class="form-note">' + escapeHtml(noteText) + "</p>" : "";
     var submitButton =
@@ -217,6 +221,7 @@
       fieldsWrapperClass ? "</div>" : "",
       note,
       submitButton,
+      statusMarkup,
       contentWrapperClass ? "</div>" : "",
     ]
       .filter(Boolean)
@@ -231,7 +236,15 @@
       '>',
       hasForm
         ? [
-            '<form class="contact-form" action="' + escapeHtml(formAction) + '" method="' + escapeHtml(formMethod) + '">',
+            '<form class="contact-form"' +
+              formId +
+              ' action="' +
+              escapeHtml(formAction) +
+              '" method="' +
+              escapeHtml(formMethod) +
+              '" data-success-message="' +
+              escapeHtml(config.successMessage || "") +
+              '">',
             bodyContent,
             "</form>",
           ].join("\n")
