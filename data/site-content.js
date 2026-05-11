@@ -293,6 +293,9 @@ window.FCC_CONTENT = {
     enquiry: {
       formAction: "https://formspree.io/f/mdabygob",
       formMethod: "POST",
+      embedHeading: "Start your enquiry",
+      embedBody:
+        "Share a few details about the support you need and the Funding Connect Consulting team will be in touch within 2 business days.",
       successMessage:
         "Thank you for reaching out. Your enquiry has been received and a member of the Funding Connect Consulting team will be in touch within 2 business days.",
       submitLabel: "Send Enquiry",
@@ -400,9 +403,9 @@ window.FCC_CONTENT = {
       intro:
         "Subscribe for occasional funding, grant writing and program design updates.",
       note: "By subscribing, you agree to receive occasional updates from Funding Connect Consulting. You can unsubscribe at any time.",
-      embedHeading: "Mailchimp signup form",
+      embedHeading: "Stay connected",
       embedBody:
-        "Create your Mailchimp embedded signup form, then paste that code into this section so subscribers are added directly to your Mailchimp audience.",
+        "Join the Funding Connect Consulting newsletter for occasional updates on funding opportunities, grant writing insights and program design ideas.",
     },
   },
 };

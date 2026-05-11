@@ -7,6 +7,45 @@
 "use strict";
 
 (function () {
+  var NEWSLETTER_EMBED_HTML = [
+    '<div id="mc_embed_shell" class="newsletter-mailchimp">',
+    '  <form',
+    '    action="https://gmail.us4.list-manage.com/subscribe/post?u=3fddf78ceebabcd47064a1292&amp;id=4220c7f815&amp;f_id=00f4a7e2f0"',
+    '    method="post"',
+    '    id="mc-embedded-subscribe-form"',
+    '    name="mc-embedded-subscribe-form"',
+    '    class="newsletter-mailchimp-form"',
+    '    target="_blank"',
+    '    novalidate',
+    "  >",
+    '    <div class="newsletter-mailchimp-grid">',
+    '      <div class="mc-field-group">',
+    '        <label for="mce-EMAIL">Email Address <span aria-hidden="true">*</span></label>',
+    '        <input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required value="" />',
+    "      </div>",
+    '      <div class="mc-field-group">',
+    '        <label for="mce-FNAME">First Name <span aria-hidden="true">*</span></label>',
+    '        <input type="text" name="FNAME" class="required text" id="mce-FNAME" required value="" />',
+    "      </div>",
+    '      <div class="mc-field-group newsletter-mailchimp-full">',
+    '        <label for="mce-COMPANY">Organisation Name</label>',
+    '        <input type="text" name="COMPANY" class="text" id="mce-COMPANY" value="" />',
+    "      </div>",
+    "    </div>",
+    '    <div id="mce-responses" class="clear foot">',
+    '      <div class="response" id="mce-error-response" style="display: none;"></div>',
+    '      <div class="response" id="mce-success-response" style="display: none;"></div>',
+    "    </div>",
+    '    <div aria-hidden="true" class="newsletter-honeypot">',
+    '      <input type="text" name="b_3fddf78ceebabcd47064a1292_4220c7f815" tabindex="-1" value="" />',
+    "    </div>",
+    '    <div class="newsletter-mailchimp-actions">',
+    '      <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="btn btn-gold" value="Subscribe" />',
+    "    </div>",
+    "  </form>",
+    "</div>",
+  ].join("\n");
+
   function renderRequiredMarker(field) {
     if (!field.required) return "";
     return ' <span aria-label="required">*</span>';
@@ -99,7 +138,10 @@
     }
 
     return [
-      '<div class="field' + (isCheckbox ? " field-checkbox" : "") + '">',
+      '<div class="field field-type-' +
+        escapeHtml(field.type || "text") +
+        (isCheckbox ? " field-checkbox" : "") +
+        '">',
       isCheckbox
         ? '  <p class="field-label">' + escapeHtml(field.label) + renderRequiredMarker(field) + "</p>"
         : '  <label for="' + escapeHtml(field.id) + '">' + escapeHtml(field.label) + renderRequiredMarker(field) + "</label>",
@@ -141,6 +183,8 @@
     var escapeHtml = window.FundingConnectComponents.escapeHtml;
     var isActive = options && options.active;
     var extraContent = options && options.extraContent;
+    var contentWrapperClass = options && options.contentWrapperClass;
+    var fieldsWrapperClass = options && options.fieldsWrapperClass;
     var formAction = config.formAction || "";
     var formMethod = config.formMethod || "POST";
     var hasForm = Array.isArray(config.fields) && config.fields.length > 0;
@@ -165,11 +209,15 @@
           "</div>"
         : "";
     var bodyContent = [
+      contentWrapperClass ? '<div class="' + escapeHtml(contentWrapperClass) + '">' : "",
       extraContent || "",
       successMessage,
+      fieldsWrapperClass ? '<div class="' + escapeHtml(fieldsWrapperClass) + '">' : "",
       (config.fields || []).map(renderField).join("\n"),
+      fieldsWrapperClass ? "</div>" : "",
       note,
       submitButton,
+      contentWrapperClass ? "</div>" : "",
     ]
       .filter(Boolean)
       .join("\n");
@@ -206,22 +254,36 @@
         renderTabs(config),
         renderPanel(config.enquiry || {}, "enquiry", {
           active: true,
-          buttonClass: "btn btn-deep btn-full",
+          buttonClass: "btn btn-gold btn-full",
+          contentWrapperClass: "form-panel-shell enquiry-panel-shell",
+          extraContent: [
+            '  <div class="form-panel-copy">',
+            '    <h3>' +
+              escapeHtml((config.enquiry || {}).embedHeading || "Start your enquiry") +
+              "</h3>",
+            '    <p>' +
+              escapeHtml(
+                (config.enquiry || {}).embedBody ||
+                  "Tell us a little about the support you need and we will get back to you."
+              ) +
+              "</p>",
+            "  </div>",
+          ].join("\n"),
+          fieldsWrapperClass: "contact-form-grid",
+          note: (config.enquiry || {}).note,
         }),
         renderPanel(newsletter, "newsletter", {
           buttonClass: "btn btn-gold btn-full",
           extraContent: newsletter.intro
             ? [
-                '<p class="newsletter-intro">' + escapeHtml(newsletter.intro) + "</p>",
-                '<div class="newsletter-embed-shell">',
-                '  <div class="newsletter-placeholder">',
-                "  <!-- Paste Mailchimp embedded signup form code here -->",
+                '<div class="form-panel-shell newsletter-embed-shell">',
+                '  <div class="form-panel-copy newsletter-placeholder">',
                 '    <h3>' +
                   escapeHtml(newsletter.embedHeading || "Mailchimp embedded form") +
                   "</h3>",
                 '    <p>' + escapeHtml(newsletter.embedBody || "") + "</p>",
-                '    <div class="newsletter-embed-target">Mailchimp embed goes here</div>',
                 "  </div>",
+                NEWSLETTER_EMBED_HTML,
                 "</div>",
               ].join("\n")
             : "",
