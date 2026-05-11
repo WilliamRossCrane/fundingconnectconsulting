@@ -94,14 +94,16 @@ window.FCC_CONTENT = {
       "Funding Connect Consulting was founded to ensure Aboriginal and Torres Strait Islander organisations have the expert support they need to secure funding and deliver meaningful programs.",
       "We bring deep knowledge of the funding landscape — government, philanthropic and corporate — combined with genuine respect for community-led decision making and cultural values.",
     ],
-    finalParagraph: "Whether you're searching for your first grant or scaling an established program, we walk alongside you every step of the way.",
+    finalParagraph:
+      "Whether you're searching for your first grant or scaling an established program, we walk alongside you every step of the way.",
     link: {
       label: "Learn more about us →",
       page: "about",
       ariaLabel: "Learn more about Funding Connect Consulting",
     },
     missionCard: {
-      quote: "Bridging funding with the meaningful work of Aboriginal and Torres Strait Islander communities.",
+      quote:
+        "Bridging funding with the meaningful work of Aboriginal and Torres Strait Islander communities.",
       cite: "Our Mission",
     },
   },
@@ -182,7 +184,8 @@ window.FCC_CONTENT = {
   acknowledgements: {
     title: "Acknowledgement of Country",
     full: "We acknowledge the Traditional Custodians of Country throughout Australia and recognise their continuing connection to Land, Water and Community. We pay our respects to Elders past, present and emerging.",
-    short: "We acknowledge the Traditional Custodians of Country throughout Australia and their continuing connection to Land, Water and Community.",
+    short:
+      "We acknowledge the Traditional Custodians of Country throughout Australia and their continuing connection to Land, Water and Community.",
   },
 
   servicesSection: {
@@ -252,7 +255,6 @@ window.FCC_CONTENT = {
 
   contactIntro: {
     heading: "We'd love to hear from you",
-    text: "Reach out and a member of our team will respond within 2 business days.",
   },
 
   contactInfo: [
@@ -289,27 +291,45 @@ window.FCC_CONTENT = {
     ],
 
     enquiry: {
-      successMessage: "✓ Thanks! We'll be in touch within 2 business days.",
-      submitLabel: "Send Enquiry →",
+      formAction: "https://formspree.io/f/mdabygob",
+      formMethod: "POST",
+      successMessage:
+        "Thank you for reaching out. Your enquiry has been received and a member of the Funding Connect Consulting team will be in touch within 2 business days.",
+      submitLabel: "Send Enquiry",
       submitAriaLabel: "Send your enquiry",
       fields: [
+        {
+          type: "hidden",
+          name: "_subject",
+          value: "New Funding Connect Consulting enquiry",
+        },
+        {
+          type: "hidden",
+          name: "_next",
+          value: "",
+        },
+        {
+          type: "hidden",
+          name: "_gotcha",
+          value: "",
+        },
         {
           id: "e-name",
           label: "Full Name",
           type: "text",
-          name: "name",
+          name: "full_name",
           placeholder: "Your name",
           autocomplete: "name",
           required: true,
         },
         {
           id: "e-org",
-          label: "Organisation",
+          label: "Organisation Name",
           type: "text",
           name: "organisation",
           placeholder: "Organisation name",
           autocomplete: "organization",
-          required: true,
+          required: false,
         },
         {
           id: "e-email",
@@ -329,82 +349,60 @@ window.FCC_CONTENT = {
           autocomplete: "tel",
         },
         {
-          id: "e-service",
-          label: "Service Interested In",
+          id: "e-service-needed",
+          label: "Service Needed",
           type: "select",
-          name: "service",
+          name: "service_needed",
           placeholder: "Select a service...",
+          required: false,
           options: [
-            { value: "funding-identification", label: "Funding Identification" },
+            {
+              value: "funding-identification",
+              label: "Funding Identification",
+            },
             { value: "grant-writing", label: "Grant Writing" },
             { value: "program-design", label: "Program Design" },
-            { value: "stakeholder-engagement", label: "Stakeholder Engagement" },
-            { value: "monitoring-evaluation", label: "Monitoring & Evaluation" },
+            {
+              value: "stakeholder-engagement",
+              label: "Stakeholder Engagement",
+            },
+            {
+              value: "monitoring-evaluation",
+              label: "Monitoring & Evaluation",
+            },
             { value: "capacity-building", label: "Capacity Building" },
             { value: "not-sure", label: "Not sure yet" },
           ],
         },
         {
           id: "e-msg",
-          label: "Tell us about your needs",
+          label: "Message",
           type: "textarea",
           name: "message",
-          placeholder: "Briefly describe your organisation and what you're hoping to achieve...",
+          placeholder:
+            "Tell us a little about what support you need and we will get back to you.",
+          required: true,
+        },
+        {
+          id: "e-consent",
+          label: "Consent",
+          type: "checkbox",
+          name: "consent",
+          checkboxLabel:
+            "I consent to Funding Connect Consulting using these details to respond to my enquiry.",
+          required: true,
         },
       ],
+      note: "Funding Connect Consulting collects your details so we can respond to your enquiry and provide relevant support. Please share only the information needed for us to understand and respond to your request.",
     },
 
     newsletter: {
-      intro: "Stay informed on funding opportunities, sector news and resources for First Nations organisations. Delivered monthly.",
-      note: "By subscribing you agree to receive our monthly newsletter. Unsubscribe anytime.",
-      successMessage: "✓ Welcome! You're now subscribed.",
-      submitLabel: "Subscribe →",
-      submitAriaLabel: "Subscribe to the newsletter",
-      fields: [
-        {
-          id: "n-name",
-          label: "Full Name",
-          type: "text",
-          name: "name",
-          placeholder: "Your name",
-          autocomplete: "name",
-          required: true,
-        },
-        {
-          id: "n-email",
-          label: "Email",
-          type: "email",
-          name: "email",
-          placeholder: "your@email.com",
-          autocomplete: "email",
-          required: true,
-        },
-        {
-          id: "n-org",
-          label: "Organisation",
-          type: "text",
-          name: "organisation",
-          placeholder: "Optional",
-          autocomplete: "organization",
-        },
-        {
-          id: "n-state",
-          label: "State / Territory",
-          type: "select",
-          name: "state",
-          placeholder: "Select...",
-          options: [
-            { value: "QLD", label: "QLD" },
-            { value: "NSW", label: "NSW" },
-            { value: "VIC", label: "VIC" },
-            { value: "WA", label: "WA" },
-            { value: "SA", label: "SA" },
-            { value: "NT", label: "NT" },
-            { value: "TAS", label: "TAS" },
-            { value: "ACT", label: "ACT" },
-          ],
-        },
-      ],
+      intro:
+        "Subscribe for occasional funding, grant writing and program design updates.",
+      note: "By subscribing, you agree to receive occasional updates from Funding Connect Consulting. You can unsubscribe at any time.",
+      embedHeading: "Mailchimp signup form",
+      embedBody:
+        "Create your Mailchimp embedded signup form, then paste that code into this section so subscribers are added directly to your Mailchimp audience.",
     },
   },
 };

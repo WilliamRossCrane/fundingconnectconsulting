@@ -1,8 +1,7 @@
 /**
  * Connect page forms component.
  *
- * Renders the contact tabs and form panels from data/site-content.js while
- * preserving the field IDs used by scripts/forms.js.
+ * Renders the contact tabs and form panels from data/site-content.js.
  */
 
 "use strict";
@@ -36,19 +35,39 @@
   function renderFieldControl(field) {
     var escapeHtml = window.FundingConnectComponents.escapeHtml;
 
+    if (field.type === "hidden") {
+      return [
+        '<input',
+        '  type="hidden"',
+        '  name="' + escapeHtml(field.name) + '"',
+        '  value="' + escapeHtml(field.value || "") + '"',
+        "/>",
+      ].join("\n");
+    }
+
+    if (field.type === "checkbox") {
+      return [
+        '<label class="checkbox-field" for="' + escapeHtml(field.id) + '">',
+        '  <input id="' + escapeHtml(field.id) + '" type="checkbox" name="' + escapeHtml(field.name) + '"' + (field.required ? " required" : "") + " />",
+        '  <span>' + escapeHtml(field.checkboxLabel || "") + "</span>",
+        "</label>",
+      ].join("\n");
+    }
+
     if (field.type === "textarea") {
       return [
         '<textarea',
         '  id="' + escapeHtml(field.id) + '"',
         '  name="' + escapeHtml(field.name) + '"',
         '  placeholder="' + escapeHtml(field.placeholder || "") + '"',
+        field.required ? "  required" : "",
         "></textarea>",
       ].join("\n");
     }
 
     if (field.type === "select") {
       return [
-        '<select id="' + escapeHtml(field.id) + '" name="' + escapeHtml(field.name) + '">',
+        '<select id="' + escapeHtml(field.id) + '" name="' + escapeHtml(field.name) + '"' + (field.required ? " required" : "") + ">",
         renderOptions(field),
         "</select>",
       ].join("\n");
@@ -72,12 +91,18 @@
 
   function renderField(field) {
     var escapeHtml = window.FundingConnectComponents.escapeHtml;
+    var isHidden = field.type === "hidden";
+    var isCheckbox = field.type === "checkbox";
+
+    if (isHidden) {
+      return renderFieldControl(field);
+    }
 
     return [
-      '<div class="field">',
-      '  <label for="' + escapeHtml(field.id) + '">',
-      "    " + escapeHtml(field.label) + renderRequiredMarker(field),
-      "  </label>",
+      '<div class="field' + (isCheckbox ? " field-checkbox" : "") + '">',
+      isCheckbox
+        ? '  <p class="field-label">' + escapeHtml(field.label) + renderRequiredMarker(field) + "</p>"
+        : '  <label for="' + escapeHtml(field.id) + '">' + escapeHtml(field.label) + renderRequiredMarker(field) + "</label>",
       renderFieldControl(field),
       "</div>",
     ].join("\n");
@@ -115,9 +140,39 @@
   function renderPanel(config, panelId, options) {
     var escapeHtml = window.FundingConnectComponents.escapeHtml;
     var isActive = options && options.active;
-    var buttonClass = options && options.buttonClass;
-    var submitForm = options && options.submitForm;
     var extraContent = options && options.extraContent;
+    var formAction = config.formAction || "";
+    var formMethod = config.formMethod || "POST";
+    var hasForm = Array.isArray(config.fields) && config.fields.length > 0;
+    var noteText = (options && options.note) || config.note || "";
+    var note = noteText ? '<p class="form-note">' + escapeHtml(noteText) + "</p>" : "";
+    var submitButton =
+      config.submitLabel
+        ? '<button type="submit" class="' +
+          escapeHtml(options.buttonClass) +
+          '" aria-label="' +
+          escapeHtml(config.submitAriaLabel || config.submitLabel) +
+          '">' +
+          escapeHtml(config.submitLabel) +
+          "</button>"
+        : "";
+    var successMessage =
+      config.successMessage
+        ? '<div class="form-success-banner" id="' +
+          escapeHtml(panelId + "-success-banner") +
+          '" role="status" aria-live="polite">' +
+          escapeHtml(config.successMessage) +
+          "</div>"
+        : "";
+    var bodyContent = [
+      extraContent || "",
+      successMessage,
+      (config.fields || []).map(renderField).join("\n"),
+      note,
+      submitButton,
+    ]
+      .filter(Boolean)
+      .join("\n");
 
     return [
       '<div',
@@ -126,23 +181,13 @@
       '  role="tabpanel"',
       '  aria-labelledby="tab-btn-' + escapeHtml(panelId) + '"',
       '>',
-      extraContent || "",
-      (config.fields || []).map(renderField).join("\n"),
-      options && options.note ? '<p class="form-note">' + escapeHtml(options.note) + "</p>" : "",
-      '<button type="button" class="' +
-        escapeHtml(buttonClass) +
-        '" data-submit-form="' +
-        escapeHtml(submitForm) +
-        '" aria-label="' +
-        escapeHtml(config.submitAriaLabel) +
-        '">',
-      "  " + escapeHtml(config.submitLabel),
-      "</button>",
-      '<div class="form-success" id="' +
-        escapeHtml(panelId === "enquiry" ? "e-success" : "n-success") +
-        '" role="alert" aria-live="polite">',
-      "  " + escapeHtml(config.successMessage),
-      "</div>",
+      hasForm
+        ? [
+            '<form class="contact-form" action="' + escapeHtml(formAction) + '" method="' + escapeHtml(formMethod) + '">',
+            bodyContent,
+            "</form>",
+          ].join("\n")
+        : bodyContent,
       "</div>",
     ]
       .filter(Boolean)
@@ -162,15 +207,24 @@
         renderPanel(config.enquiry || {}, "enquiry", {
           active: true,
           buttonClass: "btn btn-deep btn-full",
-          submitForm: "enquiry",
         }),
         renderPanel(newsletter, "newsletter", {
           buttonClass: "btn btn-gold btn-full",
-          submitForm: "newsletter",
           extraContent: newsletter.intro
-            ? '<p class="newsletter-intro">' + escapeHtml(newsletter.intro) + "</p>"
+            ? [
+                '<p class="newsletter-intro">' + escapeHtml(newsletter.intro) + "</p>",
+                '<div class="newsletter-embed-shell">',
+                '  <div class="newsletter-placeholder">',
+                "  <!-- Paste Mailchimp embedded signup form code here -->",
+                '    <h3>' +
+                  escapeHtml(newsletter.embedHeading || "Mailchimp embedded form") +
+                  "</h3>",
+                '    <p>' + escapeHtml(newsletter.embedBody || "") + "</p>",
+                '    <div class="newsletter-embed-target">Mailchimp embed goes here</div>',
+                "  </div>",
+                "</div>",
+              ].join("\n")
             : "",
-          note: newsletter.note,
         }),
         "</div>",
       ].join("\n"),

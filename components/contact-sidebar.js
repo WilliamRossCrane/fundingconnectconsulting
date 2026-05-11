@@ -14,7 +14,7 @@
       "connect-intro-placeholder",
       [
         "<h2>" + escapeHtml(content.heading) + "</h2>",
-        "<p>" + escapeHtml(content.text) + "</p>",
+        content.text ? "<p>" + escapeHtml(content.text) + "</p>" : "",
       ].join("\n"),
     );
   }
