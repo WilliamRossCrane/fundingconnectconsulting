@@ -248,6 +248,51 @@
   color: inherit;
 }
 
+@media (min-width: 1200px) {
+  .tabs {
+    margin-bottom: 22px;
+  }
+
+  .enquiry-panel-shell {
+    width: min(100%, 720px);
+    padding: 20px 22px;
+  }
+
+  .enquiry-panel-shell .form-panel-copy p {
+    margin-bottom: 14px;
+  }
+
+  .enquiry-panel-shell .contact-form-grid {
+    gap: 12px 20px;
+  }
+
+  .enquiry-panel-shell .field label,
+  .enquiry-panel-shell .field-label {
+    margin-bottom: 4px;
+  }
+
+  .enquiry-panel-shell .field textarea {
+    min-height: 128px;
+  }
+
+  .enquiry-panel-shell .field-checkbox {
+    margin-top: 12px;
+  }
+
+  .enquiry-panel-shell .form-note {
+    margin: 14px 0 16px;
+    padding: 12px 14px;
+  }
+
+  .enquiry-panel-shell .contact-form .btn {
+    margin-top: 4px;
+  }
+
+  .enquiry-panel-shell .form-status {
+    margin-top: 10px;
+  }
+}
+
 @media (max-width: 640px) {
   .contact-form-grid {
     grid-template-columns: 1fr;
