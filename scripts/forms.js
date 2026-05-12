@@ -7,6 +7,98 @@
 "use strict";
 
 (function () {
+  function escapeHtml(value) {
+    return String(value)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function showSuccessPopup(options) {
+    var config = options || {};
+    var title = escapeHtml(config.title || "Thank you");
+    var message = escapeHtml(
+      config.message || "Your submission has been received."
+    );
+    var buttonLabel = escapeHtml(config.buttonLabel || "Close");
+    var activeOverlay = document.getElementById("form-success-overlay");
+
+    if (activeOverlay) {
+      activeOverlay.remove();
+    }
+
+    var overlay = document.createElement("div");
+    overlay.className = "form-success-overlay";
+    overlay.id = "form-success-overlay";
+    overlay.setAttribute("role", "dialog");
+    overlay.setAttribute("aria-modal", "true");
+    overlay.setAttribute("aria-labelledby", "form-success-title");
+
+    overlay.innerHTML = [
+      '<div class="form-success-card">',
+      '  <button class="form-success-close" type="button" aria-label="Close confirmation">&#x2715;</button>',
+      '  <p class="form-success-title" id="form-success-title">' + title + "</p>",
+      '  <p class="form-success-message">' + message + "</p>",
+      '  <button class="form-success-btn" type="button">' + buttonLabel + "</button>",
+      "</div>",
+    ].join("\n");
+
+    function closePopup() {
+      overlay.classList.add("closing");
+      overlay.addEventListener(
+        "animationend",
+        function () {
+          overlay.remove();
+        },
+        { once: true }
+      );
+
+      document.removeEventListener("keydown", onKeyDown);
+    }
+
+    function onKeyDown(event) {
+      if (event.key === "Escape") {
+        closePopup();
+      }
+    }
+
+    var closeButton = overlay.querySelector(".form-success-close");
+    var actionButton = overlay.querySelector(".form-success-btn");
+    var focusable = [closeButton, actionButton];
+
+    overlay.addEventListener("click", function (event) {
+      if (event.target === overlay) {
+        closePopup();
+      }
+    });
+
+    overlay.addEventListener("keydown", function (event) {
+      if (event.key !== "Tab") return;
+
+      var first = focusable[0];
+      var last = focusable[focusable.length - 1];
+
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+
+    closeButton.addEventListener("click", closePopup);
+    actionButton.addEventListener("click", closePopup);
+    document.addEventListener("keydown", onKeyDown);
+    document.body.appendChild(overlay);
+
+    window.setTimeout(function () {
+      actionButton.focus();
+    }, 100);
+  }
+
   function setStatusMessage(element, message, state) {
     if (!element) return;
 
@@ -33,7 +125,7 @@
         contactForm.getAttribute("data-success-message") ||
         "Thanks! Your enquiry has been sent.";
 
-      setStatusMessage(contactStatus, "Sending...", "is-pending");
+      setStatusMessage(contactStatus, "", "");
 
       if (submitButton) {
         submitButton.disabled = true;
@@ -49,7 +141,12 @@
         });
 
         if (response.ok) {
-          setStatusMessage(contactStatus, successMessage, "is-success");
+          setStatusMessage(contactStatus, "", "");
+          showSuccessPopup({
+            title: "Enquiry sent",
+            message: successMessage,
+            buttonLabel: "Back to site",
+          });
           contactForm.reset();
         } else {
           setStatusMessage(
@@ -148,12 +245,7 @@
       // Mailchimp embedded forms require the post-json endpoint because a static
       // site cannot submit cross-origin AJAX directly to the normal post URL.
       // JSONP works here by letting Mailchimp return a script callback instead.
-      setMailchimpResponse(
-        successNode,
-        errorNode,
-        "Subscribing...",
-        "is-pending"
-      );
+      setMailchimpResponse(successNode, errorNode, "", "");
 
       if (submitButton) {
         submitButton.disabled = true;
@@ -166,9 +258,14 @@
           setMailchimpResponse(
             successNode,
             errorNode,
-            "Thanks! Please check your email to confirm your subscription.",
+            "",
             "is-success"
           );
+          showSuccessPopup({
+            title: "Newsletter sent",
+            message: "Thanks for subscribing. Please check your email to confirm your subscription.",
+            buttonLabel: "Continue browsing",
+          });
           mailchimpForm.reset();
         } else {
           setMailchimpResponse(

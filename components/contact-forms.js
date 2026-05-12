@@ -204,18 +204,9 @@
           escapeHtml(config.submitLabel) +
           "</button>"
         : "";
-    var successMessage =
-      config.successMessage
-        ? '<div class="form-success-banner" id="' +
-          escapeHtml(panelId + "-success-banner") +
-          '" role="status" aria-live="polite">' +
-          escapeHtml(config.successMessage) +
-          "</div>"
-        : "";
     var bodyContent = [
       contentWrapperClass ? '<div class="' + escapeHtml(contentWrapperClass) + '">' : "",
       extraContent || "",
-      successMessage,
       fieldsWrapperClass ? '<div class="' + escapeHtml(fieldsWrapperClass) + '">' : "",
       (config.fields || []).map(renderField).join("\n"),
       fieldsWrapperClass ? "</div>" : "",
