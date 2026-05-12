@@ -1,108 +1,221 @@
 /**
  * Funding Connect Consulting — forms.js
  *
- * Handles enquiry and newsletter form behaviour.
+ * Static form helpers for Formspree and embedded Mailchimp signup content.
  */
 
 "use strict";
 
 (function () {
-  /**
-   * TO CONNECT A REAL BACKEND:
-   *   Formspree — replace the fetch URL with your Formspree endpoint.
-   *   Vercel    — POST to /api/enquiry.js
-   *   EmailJS   — https://www.emailjs.com
-   */
-  function submitEnquiry() {
-    var name = window.FundingConnectApp.getTrimmedValue("e-name");
-    var email = window.FundingConnectApp.getTrimmedValue("e-email");
+  function setStatusMessage(element, message, state) {
+    if (!element) return;
 
-    if (!name || !email) {
-      alert("Please enter your name and email address.");
-      return;
+    element.textContent = message || "";
+    element.classList.remove("is-success", "is-error", "is-pending");
+
+    if (state) {
+      element.classList.add(state);
     }
-
-    /* ── Uncomment to connect a real backend ──
-    fetch('https://formspree.io/f/YOUR_FORM_ID', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
-        name:         name,
-        organisation: document.getElementById('e-org').value.trim(),
-        email:        email,
-        phone:        document.getElementById('e-phone').value.trim(),
-        service:      document.getElementById('e-service').value,
-        message:      document.getElementById('e-msg').value.trim(),
-      }),
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error('Network error');
-        window.FundingConnectApp.clearFields(['e-name', 'e-org', 'e-email', 'e-phone', 'e-service', 'e-msg']);
-        window.FundingConnectApp.showSuccess('e-success');
-      })
-      .catch(function () {
-        alert('Something went wrong. Please email us at hello@fundingconnect.com.au');
-      });
-    */
-
-    window.FundingConnectApp.clearFields([
-      "e-name",
-      "e-org",
-      "e-email",
-      "e-phone",
-      "e-service",
-      "e-msg",
-    ]);
-    window.FundingConnectApp.showSuccess("e-success");
   }
 
-  /**
-   * TO CONNECT A REAL BACKEND:
-   *   Mailchimp / ConvertKit / Vercel Serverless Function
-   */
-  function submitNewsletter() {
-    var name = window.FundingConnectApp.getTrimmedValue("n-name");
-    var email = window.FundingConnectApp.getTrimmedValue("n-email");
+  function initContactForm() {
+    var contactForm = document.getElementById("contact-form");
+    var contactStatus = document.getElementById("contact-form-status");
 
-    if (!name || !email) {
-      alert("Please enter your name and email address.");
-      return;
+    if (!contactForm) return;
+
+    contactForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      var submitButton = contactForm.querySelector("button[type='submit']");
+      var formData = new FormData(contactForm);
+      var successMessage =
+        contactForm.getAttribute("data-success-message") ||
+        "Thanks! Your enquiry has been sent.";
+
+      setStatusMessage(contactStatus, "Sending...", "is-pending");
+
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+
+      try {
+        var response = await fetch(contactForm.action, {
+          method: contactForm.method || "POST",
+          body: formData,
+          headers: {
+            Accept: "application/json",
+          },
+        });
+
+        if (response.ok) {
+          setStatusMessage(contactStatus, successMessage, "is-success");
+          contactForm.reset();
+        } else {
+          setStatusMessage(
+            contactStatus,
+            "Something went wrong. Please try again.",
+            "is-error"
+          );
+        }
+      } catch (error) {
+        setStatusMessage(
+          contactStatus,
+          "Something went wrong. Please try again.",
+          "is-error"
+        );
+      } finally {
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+      }
+    });
+  }
+
+  function buildMailchimpJsonpUrl(actionUrl) {
+    var normalizedUrl = actionUrl.replace(
+      "/subscribe/post?",
+      "/subscribe/post-json?"
+    );
+
+    if (!/([?&])c=\?/.test(normalizedUrl)) {
+      normalizedUrl += normalizedUrl.indexOf("?") === -1 ? "?c=?" : "&c=?";
     }
 
-    /* ── Uncomment to connect a real backend ──
-    fetch('/api/newsletter', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        name:         name,
-        email:        email,
-        organisation: document.getElementById('n-org').value.trim(),
-        state:        document.getElementById('n-state').value,
-      }),
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error('Network error');
-        window.FundingConnectApp.clearFields(['n-name', 'n-email', 'n-org', 'n-state']);
-        window.FundingConnectApp.showSuccess('n-success');
-      })
-      .catch(function () {
-        alert('Something went wrong. Please try again later.');
-      });
-    */
+    return normalizedUrl;
+  }
 
-    window.FundingConnectApp.clearFields(["n-name", "n-email", "n-org", "n-state"]);
-    window.FundingConnectApp.showSuccess("n-success");
+  function setMailchimpNodeState(node, message, state, allowHtml) {
+    if (!node) return;
+
+    node.style.display = message ? "block" : "none";
+    node.classList.remove("is-pending", "is-success", "is-error");
+
+    if (state) {
+      node.classList.add(state);
+    }
+
+    if (allowHtml) {
+      node.innerHTML = message || "";
+    } else {
+      node.textContent = message || "";
+    }
+  }
+
+  function setMailchimpResponse(successNode, errorNode, message, state) {
+    if (successNode) {
+      setMailchimpNodeState(
+        successNode,
+        state === "is-success" || state === "is-pending" ? message : "",
+        state,
+        false
+      );
+    }
+
+    if (errorNode) {
+      setMailchimpNodeState(
+        errorNode,
+        state === "is-error" ? message : "",
+        state,
+        false
+      );
+    }
+  }
+
+  function initMailchimpForm() {
+    var mailchimpForm = document.getElementById("mc-embedded-subscribe-form");
+
+    if (!mailchimpForm) return;
+
+    var successNode = document.getElementById("mce-success-response");
+    var errorNode = document.getElementById("mce-error-response");
+
+    mailchimpForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      var submitButton = mailchimpForm.querySelector(
+        "button[type='submit'], input[type='submit']"
+      );
+      var formData = new FormData(mailchimpForm);
+      var callbackName = "mailchimpCallback_" + Date.now();
+      var script = document.createElement("script");
+      var timeoutId;
+      var actionUrl = buildMailchimpJsonpUrl(
+        mailchimpForm.getAttribute("action") || ""
+      );
+      var params = new URLSearchParams(formData).toString();
+
+      // Mailchimp embedded forms require the post-json endpoint because a static
+      // site cannot submit cross-origin AJAX directly to the normal post URL.
+      // JSONP works here by letting Mailchimp return a script callback instead.
+      setMailchimpResponse(
+        successNode,
+        errorNode,
+        "Subscribing...",
+        "is-pending"
+      );
+
+      if (submitButton) {
+        submitButton.disabled = true;
+      }
+
+      window[callbackName] = function (response) {
+        window.clearTimeout(timeoutId);
+
+        if (response && response.result === "success") {
+          setMailchimpResponse(
+            successNode,
+            errorNode,
+            "Thanks! Please check your email to confirm your subscription.",
+            "is-success"
+          );
+          mailchimpForm.reset();
+        } else {
+          setMailchimpResponse(
+            successNode,
+            errorNode,
+            (response && response.msg) ||
+              "Something went wrong. Please try again.",
+            "is-error"
+          );
+        }
+
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+
+        delete window[callbackName];
+        script.remove();
+      };
+
+      timeoutId = window.setTimeout(function () {
+        setMailchimpResponse(
+          successNode,
+          errorNode,
+          "Something went wrong. Please try again.",
+          "is-error"
+        );
+
+        if (submitButton) {
+          submitButton.disabled = false;
+        }
+
+        delete window[callbackName];
+        script.remove();
+      }, 10000);
+
+      script.src =
+        actionUrl.replace("c=?", "c=" + callbackName) +
+        (params ? "&" + params : "");
+      script.async = true;
+      document.body.appendChild(script);
+    });
   }
 
   function initForms() {
-    var enquiryBtn = document.querySelector('[data-submit-form="enquiry"]');
-    var newsletterBtn = document.querySelector('[data-submit-form="newsletter"]');
-
-    if (enquiryBtn) enquiryBtn.addEventListener("click", submitEnquiry);
-    if (newsletterBtn) newsletterBtn.addEventListener("click", submitNewsletter);
+    initContactForm();
+    initMailchimpForm();
   }
 
-  window.submitEnquiry = submitEnquiry;
-  window.submitNewsletter = submitNewsletter;
   window.FundingConnectApp.initForms = initForms;
 })();
