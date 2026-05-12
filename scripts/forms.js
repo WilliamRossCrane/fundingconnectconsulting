@@ -73,7 +73,10 @@
   }
 
   function buildMailchimpJsonpUrl(actionUrl) {
-    var normalizedUrl = actionUrl.replace("/subscribe/post?", "/subscribe/post-json?");
+    var normalizedUrl = actionUrl.replace(
+      "/subscribe/post?",
+      "/subscribe/post-json?"
+    );
 
     if (!/([?&])c=\?/.test(normalizedUrl)) {
       normalizedUrl += normalizedUrl.indexOf("?") === -1 ? "?c=?" : "&c=?";
@@ -114,7 +117,7 @@
         errorNode,
         state === "is-error" ? message : "",
         state,
-        true
+        false
       );
     }
   }
@@ -137,13 +140,20 @@
       var callbackName = "mailchimpCallback_" + Date.now();
       var script = document.createElement("script");
       var timeoutId;
-      var actionUrl = buildMailchimpJsonpUrl(mailchimpForm.getAttribute("action") || "");
+      var actionUrl = buildMailchimpJsonpUrl(
+        mailchimpForm.getAttribute("action") || ""
+      );
       var params = new URLSearchParams(formData).toString();
 
       // Mailchimp embedded forms require the post-json endpoint because a static
       // site cannot submit cross-origin AJAX directly to the normal post URL.
       // JSONP works here by letting Mailchimp return a script callback instead.
-      setMailchimpResponse(successNode, errorNode, "Subscribing...", "is-pending");
+      setMailchimpResponse(
+        successNode,
+        errorNode,
+        "Subscribing...",
+        "is-pending"
+      );
 
       if (submitButton) {
         submitButton.disabled = true;
@@ -164,7 +174,8 @@
           setMailchimpResponse(
             successNode,
             errorNode,
-            (response && response.msg) || "Something went wrong. Please try again.",
+            (response && response.msg) ||
+              "Something went wrong. Please try again.",
             "is-error"
           );
         }
