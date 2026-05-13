@@ -1,21 +1,15 @@
-/**
- * Connect page forms component.
- *
- * Renders the contact tabs and form panels from data/site-content.js.
- */
-
 "use strict";
 
 (function () {
   var NEWSLETTER_EMBED_HTML = [
     '<div id="mc_embed_shell" class="newsletter-mailchimp">',
-    '  <form',
+    "  <form",
     '    action="https://gmail.us4.list-manage.com/subscribe/post?u=3fddf78ceebabcd47064a1292&amp;id=4220c7f815&amp;f_id=00f4a7e2f0"',
     '    method="post"',
     '    id="mc-embedded-subscribe-form"',
     '    name="mc-embedded-subscribe-form"',
     '    class="newsletter-mailchimp-form"',
-    '    novalidate',
+    "    novalidate",
     "  >",
     '    <div class="newsletter-mailchimp-grid">',
     '      <div class="mc-field-group">',
@@ -45,6 +39,26 @@
     "</div>",
   ].join("\n");
 
+  var contactIcons = {
+    email: [
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" focusable="false">',
+      '  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="#0E4D57" stroke-width="2" />',
+      '  <polyline points="22,6 12,13 2,6" stroke="#0E4D57" stroke-width="2" />',
+      "</svg>",
+    ].join("\n"),
+    phone: [
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" focusable="false">',
+      '  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.42 2 2 0 0 1 3.58 1.25h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l1.13-.92a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z" stroke="#0E4D57" stroke-width="2" />',
+      "</svg>",
+    ].join("\n"),
+    location: [
+      '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" focusable="false">',
+      '  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="#0E4D57" stroke-width="2" />',
+      '  <circle cx="12" cy="10" r="3" stroke="#0E4D57" stroke-width="2" />',
+      "</svg>",
+    ].join("\n"),
+  };
+
   function renderRequiredMarker(field) {
     if (!field.required) return "";
     return ' <span aria-label="required">*</span>';
@@ -55,7 +69,9 @@
     var options = field.options || [];
 
     return [
-      '<option value="">' + escapeHtml(field.placeholder || "Select...") + "</option>",
+      '<option value="">' +
+        escapeHtml(field.placeholder || "Select...") +
+        "</option>",
       options
         .map(function (option) {
           return (
@@ -75,7 +91,7 @@
 
     if (field.type === "hidden") {
       return [
-        '<input',
+        "<input",
         '  type="hidden"',
         '  name="' + escapeHtml(field.name) + '"',
         '  value="' + escapeHtml(field.value || "") + '"',
@@ -86,15 +102,21 @@
     if (field.type === "checkbox") {
       return [
         '<label class="checkbox-field" for="' + escapeHtml(field.id) + '">',
-        '  <input id="' + escapeHtml(field.id) + '" type="checkbox" name="' + escapeHtml(field.name) + '"' + (field.required ? " required" : "") + " />",
-        '  <span>' + escapeHtml(field.checkboxLabel || "") + "</span>",
+        '  <input id="' +
+          escapeHtml(field.id) +
+          '" type="checkbox" name="' +
+          escapeHtml(field.name) +
+          '"' +
+          (field.required ? " required" : "") +
+          " />",
+        "  <span>" + escapeHtml(field.checkboxLabel || "") + "</span>",
         "</label>",
       ].join("\n");
     }
 
     if (field.type === "textarea") {
       return [
-        '<textarea',
+        "<textarea",
         '  id="' + escapeHtml(field.id) + '"',
         '  name="' + escapeHtml(field.name) + '"',
         '  placeholder="' + escapeHtml(field.placeholder || "") + '"',
@@ -105,14 +127,20 @@
 
     if (field.type === "select") {
       return [
-        '<select id="' + escapeHtml(field.id) + '" name="' + escapeHtml(field.name) + '"' + (field.required ? " required" : "") + ">",
+        '<select id="' +
+          escapeHtml(field.id) +
+          '" name="' +
+          escapeHtml(field.name) +
+          '"' +
+          (field.required ? " required" : "") +
+          ">",
         renderOptions(field),
         "</select>",
       ].join("\n");
     }
 
     return [
-      '<input',
+      "<input",
       '  id="' + escapeHtml(field.id) + '"',
       '  type="' + escapeHtml(field.type || "text") + '"',
       '  name="' + escapeHtml(field.name) + '"',
@@ -142,8 +170,16 @@
         (isCheckbox ? " field-checkbox" : "") +
         '">',
       isCheckbox
-        ? '  <p class="field-label">' + escapeHtml(field.label) + renderRequiredMarker(field) + "</p>"
-        : '  <label for="' + escapeHtml(field.id) + '">' + escapeHtml(field.label) + renderRequiredMarker(field) + "</label>",
+        ? '  <p class="field-label">' +
+          escapeHtml(field.label) +
+          renderRequiredMarker(field) +
+          "</p>"
+        : '  <label for="' +
+          escapeHtml(field.id) +
+          '">' +
+          escapeHtml(field.label) +
+          renderRequiredMarker(field) +
+          "</label>",
       renderFieldControl(field),
       "</div>",
     ].join("\n");
@@ -161,14 +197,14 @@
         .map(function (tab, index) {
           var isActive = index === 0;
           return [
-            '<button',
+            "<button",
             '  class="tab-btn' + (isActive ? " active" : "") + '"',
             '  role="tab"',
             '  id="tab-btn-' + escapeHtml(tab.id) + '"',
             '  aria-selected="' + (isActive ? "true" : "false") + '"',
             '  aria-controls="tab-' + escapeHtml(tab.id) + '"',
             '  data-tab="' + escapeHtml(tab.id) + '"',
-            '>',
+            ">",
             "  " + escapeHtml(tab.label),
             "</button>",
           ].join("\n");
@@ -193,21 +229,26 @@
         ? '<p id="contact-form-status" class="form-status" aria-live="polite"></p>'
         : "";
     var noteText = (options && options.note) || config.note || "";
-    var note = noteText ? '<p class="form-note">' + escapeHtml(noteText) + "</p>" : "";
-    var submitButton =
-      config.submitLabel
-        ? '<button type="submit" class="' +
-          escapeHtml(options.buttonClass) +
-          '" aria-label="' +
-          escapeHtml(config.submitAriaLabel || config.submitLabel) +
-          '">' +
-          escapeHtml(config.submitLabel) +
-          "</button>"
-        : "";
+    var note = noteText
+      ? '<p class="form-note">' + escapeHtml(noteText) + "</p>"
+      : "";
+    var submitButton = config.submitLabel
+      ? '<button type="submit" class="' +
+        escapeHtml(options.buttonClass) +
+        '" aria-label="' +
+        escapeHtml(config.submitAriaLabel || config.submitLabel) +
+        '">' +
+        escapeHtml(config.submitLabel) +
+        "</button>"
+      : "";
     var bodyContent = [
-      contentWrapperClass ? '<div class="' + escapeHtml(contentWrapperClass) + '">' : "",
+      contentWrapperClass
+        ? '<div class="' + escapeHtml(contentWrapperClass) + '">'
+        : "",
       extraContent || "",
-      fieldsWrapperClass ? '<div class="' + escapeHtml(fieldsWrapperClass) + '">' : "",
+      fieldsWrapperClass
+        ? '<div class="' + escapeHtml(fieldsWrapperClass) + '">'
+        : "",
       (config.fields || []).map(renderField).join("\n"),
       fieldsWrapperClass ? "</div>" : "",
       note,
@@ -219,12 +260,12 @@
       .join("\n");
 
     return [
-      '<div',
+      "<div",
       '  id="tab-' + escapeHtml(panelId) + '"',
       '  class="tab-panel' + (isActive ? " active" : "") + '"',
       '  role="tabpanel"',
       '  aria-labelledby="tab-btn-' + escapeHtml(panelId) + '"',
-      '>',
+      ">",
       hasForm
         ? [
             '<form class="contact-form"' +
@@ -246,6 +287,84 @@
       .join("\n");
   }
 
+  function renderContactValue(item) {
+    var escapeHtml = window.FundingConnectComponents.escapeHtml;
+
+    if (item.href) {
+      return (
+        '<a href="' +
+        escapeHtml(item.href) +
+        '">' +
+        escapeHtml(item.value) +
+        "</a>"
+      );
+    }
+
+    return "<span>" + escapeHtml(item.value) + "</span>";
+  }
+
+  function renderContactItem(item) {
+    var escapeHtml = window.FundingConnectComponents.escapeHtml;
+
+    return [
+      '<li class="info-item">',
+      '  <span class="info-icon" aria-hidden="true">',
+      contactIcons[item.icon] || "",
+      "  </span>",
+      '  <div class="info-text">',
+      "    <strong>" + escapeHtml(item.label) + "</strong>",
+      "    " + renderContactValue(item),
+      "  </div>",
+      "</li>",
+    ].join("\n");
+  }
+
+  function renderContactIntro() {
+    var content = window.FCC_CONTENT.contactIntro;
+    var escapeHtml = window.FundingConnectComponents.escapeHtml;
+    if (!content) return;
+
+    window.FundingConnectComponents.setHtml(
+      "connect-intro-placeholder",
+      [
+        "<h2>" + escapeHtml(content.heading) + "</h2>",
+        content.text ? "<p>" + escapeHtml(content.text) + "</p>" : "",
+      ].join("\n")
+    );
+  }
+
+  function renderContactInfo() {
+    var contactInfo = window.FCC_CONTENT.contactInfo || [];
+
+    window.FundingConnectComponents.setHtml(
+      "contact-info-placeholder",
+      [
+        '<ul class="info-list" role="list">',
+        contactInfo.map(renderContactItem).join("\n"),
+        "</ul>",
+      ].join("\n")
+    );
+  }
+
+  function renderConnectAcknowledgement() {
+    var acknowledgements = window.FCC_CONTENT.acknowledgements || {};
+    var escapeHtml = window.FundingConnectComponents.escapeHtml;
+
+    window.FundingConnectComponents.setHtml(
+      "connect-acknowledgement-placeholder",
+      [
+        '<aside class="ack-small" aria-label="Acknowledgement of Country">',
+        "  <strong>" +
+          escapeHtml(acknowledgements.title || "Acknowledgement of Country") +
+          "</strong>",
+        "  <p>",
+        "    " + escapeHtml(acknowledgements.short || ""),
+        "  </p>",
+        "</aside>",
+      ].join("\n")
+    );
+  }
+
   function renderContactForms() {
     var config = window.FCC_CONTENT.contactForms || {};
     var escapeHtml = window.FundingConnectComponents.escapeHtml;
@@ -262,10 +381,12 @@
           contentWrapperClass: "form-panel-shell enquiry-panel-shell",
           extraContent: [
             '  <div class="form-panel-copy">',
-            '    <h3>' +
-              escapeHtml((config.enquiry || {}).embedHeading || "Start your enquiry") +
+            "    <h3>" +
+              escapeHtml(
+                (config.enquiry || {}).embedHeading || "Start your enquiry"
+              ) +
               "</h3>",
-            '    <p>' +
+            "    <p>" +
               escapeHtml(
                 (config.enquiry || {}).embedBody ||
                   "Tell us a little about the support you need and we will get back to you."
@@ -282,10 +403,12 @@
             ? [
                 '<div class="form-panel-shell newsletter-embed-shell">',
                 '  <div class="form-panel-copy newsletter-placeholder">',
-                '    <h3>' +
-                  escapeHtml(newsletter.embedHeading || "Mailchimp embedded form") +
+                "    <h3>" +
+                  escapeHtml(
+                    newsletter.embedHeading || "Mailchimp embedded form"
+                  ) +
                   "</h3>",
-                '    <p>' + escapeHtml(newsletter.embedBody || "") + "</p>",
+                "    <p>" + escapeHtml(newsletter.embedBody || "") + "</p>",
                 "  </div>",
                 NEWSLETTER_EMBED_HTML,
                 "</div>",
@@ -293,9 +416,20 @@
             : "",
         }),
         "</div>",
-      ].join("\n"),
+      ].join("\n")
     );
   }
 
-  document.addEventListener("DOMContentLoaded", renderContactForms);
+  function init() {
+    renderContactIntro();
+    renderContactInfo();
+    renderConnectAcknowledgement();
+    renderContactForms();
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
 })();

@@ -122,24 +122,13 @@ funding-connect-consulting/
 │       └── og-image.png
 │
 ├── components/
-│   ├── acknowledgement.js
-│   ├── about-intro.js
-│   ├── contact-forms.js
-│   ├── contact-info.js
-│   ├── contact-sidebar.js
+│   ├── contact.js
 │   ├── dom.js
-│   ├── footer.js
 │   ├── grants-carousel.js
-│   ├── home-blurb.js
-│   ├── home-hero.js
-│   ├── navbar.js
-│   ├── page-banner.js
-│   ├── pillars.js
-│   ├── process-steps.js
-│   ├── services-grid.js
-│   ├── values.js
+│   ├── home.js
+│   ├── layout.js
 │   ├── welcome-popup.js
-│   └── welcome-popup.css
+│
 │
 ├── data/
 │   └── site-content.js
@@ -159,7 +148,8 @@ funding-connect-consulting/
     ├── components.css
     ├── pages.css
     ├── grants.css
-    └── utilities.css
+    ├── utilities.css
+    └── welcome-popup.css
 ```
 
 ---
