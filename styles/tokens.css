@@ -15,3 +15,9 @@
   --nav-height: 68px;
   --page-padding-x: 52px;
 }
+
+@media (max-width: 768px) {
+  :root {
+    --page-padding-x: 20px;
+  }
+}

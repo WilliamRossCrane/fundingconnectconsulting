@@ -155,18 +155,11 @@ funding-connect-consulting/
     ├── main.css
     ├── tokens.css
     ├── base.css
-    ├── utilities.css
-    ├── navigation.css
     ├── layout.css
-    ├── home.css
-    ├── page-banner.css
-    ├── about.css
-    ├── services.css
-    ├── connect.css
-    ├── forms.css
-    ├── footer.css
-    ├── animations.css
-    └── responsive.css
+    ├── components.css
+    ├── pages.css
+    ├── grants.css
+    └── utilities.css
 ```
 
 ---

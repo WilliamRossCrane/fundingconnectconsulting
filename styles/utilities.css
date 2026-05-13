@@ -59,3 +59,35 @@
   width: 100%;
   justify-content: center;
 }
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fadeUp 0.45s ease both;
+}
+
+#page-home.active .hero-tag {
+  animation: fadeUp 0.45s ease 0.05s both;
+}
+
+#page-home.active .home-hero h1 {
+  animation: fadeUp 0.45s ease 0.15s both;
+}
+
+#page-home.active .home-hero > p {
+  animation: fadeUp 0.45s ease 0.25s both;
+}
+
+#page-home.active .hero-actions {
+  animation: fadeUp 0.45s ease 0.35s both;
+}
