@@ -120,9 +120,10 @@
 
   function renderGrantCard(grant) {
     var title = stripGoId(grant.title) || "Grant opportunity";
-    var link = hasUsableLink(grant) ? grant.link : "#";
-    var tagName = hasUsableLink(grant) ? "a" : "article";
-    var cardAttributes = hasUsableLink(grant)
+    var isLinked = hasUsableLink(grant);
+    var link = isLinked ? grant.link : "#";
+    var tagName = isLinked ? "a" : "article";
+    var cardAttributes = isLinked
       ? ' class="grant-card grant-card-link" role="listitem" href="' +
         escapeHtml(link) +
         '" target="_blank" rel="noopener noreferrer" aria-label="View official grant: ' +
@@ -136,7 +137,7 @@
       '  <h3 class="grant-title">' + escapeHtml(title) + "</h3>",
       '  <p class="grant-amount">' + escapeHtml(inferFundingAmount(grant)) + "</p>",
       '  <p class="grant-close">Closes: ' + escapeHtml(formatCloseDate(grant)) + "</p>",
-      '  <span class="grant-link">View official grant</span>',
+      isLinked ? '  <span class="grant-link">View official grant</span>' : "",
       "</" + tagName + ">",
     ].join("\n");
   }

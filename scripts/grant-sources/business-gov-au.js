@@ -19,7 +19,7 @@ function discoverPublicApiCandidates(html) {
     }
   });
 
-  const htmlMatches = html.match(/https?:\/\/[^"'\\s]+(?:api|json)[^"'\\s]*/gi) || [];
+  const htmlMatches = html.match(/https?:\/\/[^"'\s]+(?:api|json)[^"'\s]*/gi) || [];
 
   for (const match of htmlMatches) {
     candidates.add(match);

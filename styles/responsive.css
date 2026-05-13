@@ -155,7 +155,7 @@
   }
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 769px) and (max-width: 1024px) {
   .grant-card {
     min-width: 272px;
     max-width: 272px;
