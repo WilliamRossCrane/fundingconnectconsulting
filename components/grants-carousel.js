@@ -54,13 +54,13 @@ export function renderGrantsCarousel() {
       escapeHtml(section.status || "Updated regularly") +
       "</span>",
     "  </div>",
-    '  <div class="grants-track-wrap" id="grantsTrackWrap" aria-label="' +
+    '  <div class="grants-carousel-shell grants-track-wrap" id="grantsTrackWrap" aria-label="' +
       escapeHtml(
         section.trackAriaLabel ||
           "Scrolling grant opportunities - hover or focus to pause"
       ) +
       '">',
-    '    <div class="grants-track" id="grantCards" role="list" aria-live="polite" aria-busy="true">',
+    '    <div class="grants-carousel-track grants-track" id="grantCards" aria-live="polite" aria-busy="true">',
     renderLoadingCard(),
     "    </div>",
     "  </div>",

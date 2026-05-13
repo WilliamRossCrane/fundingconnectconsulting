@@ -29,14 +29,9 @@
   font-weight: 600;
 }
 
-.grants-track-wrap {
-  overflow-x: auto;
-  overflow-y: hidden;
+.grants-carousel-shell {
+  overflow: hidden;
   position: relative;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(33, 74, 76, 0.28) transparent;
-  touch-action: pan-x;
 }
 
 .grants-track-wrap::before,
@@ -60,26 +55,40 @@
   background: linear-gradient(to left, var(--cream), transparent);
 }
 
-.grants-track {
+.grants-carousel-track {
   display: flex;
+  flex-wrap: nowrap;
   gap: 20px;
   width: max-content;
   min-width: 100%;
   padding: 4px 0 10px;
+  transform: translate3d(0, 0, 0);
 }
 
-.grants-track-wrap::-webkit-scrollbar {
-  height: 8px;
+.grants-carousel-group {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 20px;
 }
 
-.grants-track-wrap::-webkit-scrollbar-thumb {
-  background: rgba(33, 74, 76, 0.28);
-  border-radius: 999px;
+.grants-carousel-track.is-marquee-active {
+  animation: grants-marquee var(--grants-marquee-duration, 42s) linear infinite;
+  will-change: transform;
 }
 
-.grants-track-wrap:focus-visible {
-  outline: 2px solid rgba(14, 77, 87, 0.25);
-  outline-offset: 4px;
+.grants-carousel-shell:hover .grants-carousel-track.is-marquee-active,
+.grants-carousel-shell:focus-within .grants-carousel-track.is-marquee-active {
+  animation-play-state: paused;
+}
+
+@keyframes grants-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(calc(-1 * var(--grants-loop-distance, 0px)), 0, 0);
+  }
 }
 
 .grant-card {
@@ -188,14 +197,9 @@
     gap: 12px;
   }
 
-  .grants-track-wrap {
-    scroll-snap-type: x proximity;
-  }
-
   .grant-card {
     flex-basis: clamp(272px, 84vw, 336px);
     min-height: 164px;
-    scroll-snap-align: start;
   }
 }
 
@@ -213,7 +217,22 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .grants-track-wrap {
-    scroll-behavior: auto;
+  .grants-carousel-shell {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(33, 74, 76, 0.28) transparent;
+    touch-action: pan-x;
+    scroll-snap-type: x proximity;
+  }
+
+  .grants-carousel-track {
+    animation: none;
+    transform: none;
+  }
+
+  .grants-carousel-group--clone {
+    display: none;
   }
 }

@@ -1,9 +1,10 @@
 import { renderGrantsCarousel } from "../components/grants-carousel.js";
 
 var GRANTS_PATH = "./data/grants.json";
+var GRANTS_TRACK_SELECTOR = "#grantCards";
+var GRANTS_SHELL_SELECTOR = "#grantsTrackWrap";
+var REDUCED_MOTION_QUERY = "(prefers-reduced-motion: reduce)";
 var MAX_GRANTS = 6;
-var AUTO_SCROLL_PX_PER_SECOND = 26;
-var USER_IDLE_DELAY_MS = 2200;
 var FALLBACK_MESSAGE =
   "Grant opportunities could not be loaded. Please check back soon.";
 var grantsCleanup = null;
@@ -149,17 +150,20 @@ function hasUsableLink(grant) {
   return /^https?:\/\//i.test(normalizeWhitespace(grant.link));
 }
 
-function renderGrantCard(grant) {
+function renderGrantCard(grant, options) {
+  var config = options || {};
   var title = stripGoId(grant.title) || "Grant opportunity";
   var isLinked = hasUsableLink(grant);
   var link = isLinked ? grant.link : "#";
   var tagName = isLinked ? "a" : "article";
+  var cloneTabIndex = config.isClone && isLinked ? ' tabindex="-1"' : "";
   var cardAttributes = isLinked
     ? ' class="grant-card grant-card-link" role="listitem" href="' +
       escapeHtml(link) +
       '" target="_blank" rel="noopener noreferrer" aria-label="View official grant: ' +
       escapeHtml(title) +
-      '"'
+      '"' +
+      cloneTabIndex
     : ' class="grant-card grant-card-fallback" role="listitem"';
 
   return [
@@ -198,34 +202,80 @@ function renderLoadingCard() {
   ].join("\n");
 }
 
+function renderGrantCardSet(grants, options) {
+  var config = options || {};
+  var groupClassName =
+    "grants-carousel-group" +
+    (config.isClone ? " grants-carousel-group--clone" : "");
+  var groupAttributes = config.isClone
+    ? ' class="' + groupClassName + '" aria-hidden="true" data-clone="true"'
+    : ' class="' + groupClassName + '" role="list"';
+
+  return [
+    "<div" + groupAttributes + ">",
+    grants
+      .map(function (grant) {
+        return renderGrantCard(grant, { isClone: !!config.isClone });
+      })
+      .join("\n"),
+    "</div>",
+  ].join("\n");
+}
+
+function buildGrantTrackHtml(grants) {
+  if (grants.length < 2) {
+    return renderGrantCardSet(grants);
+  }
+
+  return [
+    renderGrantCardSet(grants),
+    renderGrantCardSet(grants, { isClone: true }),
+  ].join("\n");
+}
+
 function getCarouselElements() {
   return {
-    wrap: document.getElementById("grantsTrackWrap"),
-    container: document.getElementById("grantCards"),
+    shell: document.querySelector(GRANTS_SHELL_SELECTOR),
+    track: document.querySelector(GRANTS_TRACK_SELECTOR),
   };
 }
 
-function setCardsHtml(html, options) {
+function resetCarouselMotion() {
   var elements = getCarouselElements();
-  var container = elements.container;
+
+  if (!elements.track || !elements.shell) {
+    return;
+  }
+
+  elements.shell.classList.remove("is-marquee-active");
+  elements.track.classList.remove("is-marquee-active");
+  elements.track.style.removeProperty("--grants-loop-distance");
+  elements.track.style.removeProperty("--grants-marquee-duration");
+}
+
+function setTrackHtml(html, options) {
+  var elements = getCarouselElements();
+  var track = elements.track;
+  var shell = elements.shell;
   var config = options || {};
 
-  if (!container) {
+  if (!track) {
     return false;
   }
 
-  container.setAttribute("aria-busy", config.busy ? "true" : "false");
-  container.innerHTML = html;
+  resetCarouselMotion();
+  track.setAttribute("aria-busy", config.busy ? "true" : "false");
+  track.innerHTML = html;
 
-  if (elements.wrap) {
-    elements.wrap.scrollLeft = 0;
+  if (shell) {
+    shell.scrollLeft = 0;
   }
 
   return true;
 }
 
 function showLoadingCard() {
-  setCardsHtml(renderLoadingCard(), { busy: true });
+  setTrackHtml(renderLoadingCard(), { busy: true });
 }
 
 async function loadGrants() {
@@ -242,18 +292,6 @@ async function loadGrants() {
   return response.json();
 }
 
-function duplicateGrants(grants) {
-  if (grants.length < 2) {
-    return grants.slice();
-  }
-
-  return grants.concat(grants);
-}
-
-function buildGrantCardsHtml(grants) {
-  return duplicateGrants(grants).map(renderGrantCard).join("\n");
-}
-
 function waitForNextFrame() {
   return new Promise(function (resolve) {
     window.requestAnimationFrame(function () {
@@ -262,157 +300,72 @@ function waitForNextFrame() {
   });
 }
 
-function initAutoplay() {
+function setupMarquee(grantCount) {
   var elements = getCarouselElements();
-  var wrap = elements.wrap;
-  var container = elements.container;
-  var mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-  var rafId = 0;
-  var lastFrameTime = 0;
-  var lastUserInteractionAt = 0;
-  var isPointerInside = false;
-  var isFocusInside = false;
-  var isAutoScrolling = false;
-  var loopWidth = 0;
-  var hasOverflow = false;
+  var shell = elements.shell;
+  var track = elements.track;
+  var firstGroup = track?.querySelector(".grants-carousel-group");
+  var reducedMotionQuery = window.matchMedia(REDUCED_MOTION_QUERY);
 
-  if (!wrap || !container) {
+  if (!shell || !track || !firstGroup || grantCount < 2) {
+    resetCarouselMotion();
     return function () {};
   }
 
-  function recalculateMetrics() {
-    loopWidth = container.scrollWidth / 2;
-    hasOverflow = container.scrollWidth > wrap.clientWidth + 1;
+  function applyMarqueeState() {
+    var shouldAnimate = !reducedMotionQuery.matches;
 
-    if (!Number.isFinite(loopWidth) || loopWidth <= 0) {
-      loopWidth = container.scrollWidth;
+    shell.classList.toggle("is-marquee-active", shouldAnimate);
+    track.classList.toggle("is-marquee-active", shouldAnimate);
+
+    if (!shouldAnimate) {
+      track.style.removeProperty("--grants-loop-distance");
+      track.style.removeProperty("--grants-marquee-duration");
+      return;
     }
 
-    if (!hasOverflow) {
-      wrap.scrollLeft = 0;
-    } else if (wrap.scrollLeft >= loopWidth) {
-      wrap.scrollLeft = wrap.scrollLeft - loopWidth;
-    }
-  }
-
-  function shouldPause() {
-    return (
-      mediaQuery.matches ||
-      !hasOverflow ||
-      isPointerInside ||
-      isFocusInside ||
-      document.hidden ||
-      Date.now() - lastUserInteractionAt < USER_IDLE_DELAY_MS
+    var trackStyles = window.getComputedStyle(track);
+    var trackGap = parseFloat(trackStyles.columnGap || trackStyles.gap) || 0;
+    var loopDistance = Math.ceil(
+      firstGroup.getBoundingClientRect().width + trackGap
     );
+    var durationSeconds = Math.max(35, Math.min(60, grantCount * 7));
+
+    track.style.setProperty("--grants-loop-distance", loopDistance + "px");
+    track.style.setProperty("--grants-marquee-duration", durationSeconds + "s");
   }
 
-  function step(timestamp) {
-    if (!lastFrameTime) {
-      lastFrameTime = timestamp;
-    }
+  applyMarqueeState();
+  window.addEventListener("resize", applyMarqueeState);
 
-    var delta = timestamp - lastFrameTime;
-    lastFrameTime = timestamp;
-
-    if (!shouldPause()) {
-      var nextScrollLeft =
-        wrap.scrollLeft + (AUTO_SCROLL_PX_PER_SECOND * delta) / 1000;
-
-      if (nextScrollLeft >= loopWidth) {
-        nextScrollLeft = nextScrollLeft - loopWidth;
-      }
-
-      isAutoScrolling = true;
-      wrap.scrollLeft = nextScrollLeft;
-      isAutoScrolling = false;
-    }
-
-    rafId = window.requestAnimationFrame(step);
+  if (typeof reducedMotionQuery.addEventListener === "function") {
+    reducedMotionQuery.addEventListener("change", applyMarqueeState);
   }
-
-  function registerUserInteraction() {
-    lastUserInteractionAt = Date.now();
-  }
-
-  function onPointerEnter() {
-    isPointerInside = true;
-  }
-
-  function onPointerLeave() {
-    isPointerInside = false;
-  }
-
-  function onFocusIn() {
-    isFocusInside = true;
-  }
-
-  function onFocusOut(event) {
-    if (!wrap.contains(event.relatedTarget)) {
-      isFocusInside = false;
-    }
-  }
-
-  function onUserScroll() {
-    if (!isAutoScrolling) {
-      registerUserInteraction();
-    }
-  }
-
-  recalculateMetrics();
-  rafId = window.requestAnimationFrame(step);
-
-  wrap.addEventListener("mouseenter", onPointerEnter);
-  wrap.addEventListener("mouseleave", onPointerLeave);
-  wrap.addEventListener("focusin", onFocusIn);
-  wrap.addEventListener("focusout", onFocusOut);
-  wrap.addEventListener("pointerdown", registerUserInteraction, {
-    passive: true,
-  });
-  wrap.addEventListener("touchstart", registerUserInteraction, {
-    passive: true,
-  });
-  wrap.addEventListener("wheel", registerUserInteraction, {
-    passive: true,
-  });
-  wrap.addEventListener("scroll", onUserScroll, { passive: true });
-  window.addEventListener("resize", recalculateMetrics);
-  document.addEventListener("visibilitychange", recalculateMetrics);
-  window.addEventListener("load", recalculateMetrics);
 
   if (document.fonts?.ready) {
-    document.fonts.ready.then(recalculateMetrics).catch(function () {});
+    document.fonts.ready.then(applyMarqueeState).catch(function () {});
   }
 
-  if (typeof mediaQuery.addEventListener === "function") {
-    mediaQuery.addEventListener("change", recalculateMetrics);
-  }
+  return function cleanupMarquee() {
+    window.removeEventListener("resize", applyMarqueeState);
 
-  return function cleanupAutoplay() {
-    window.cancelAnimationFrame(rafId);
-    wrap.removeEventListener("mouseenter", onPointerEnter);
-    wrap.removeEventListener("mouseleave", onPointerLeave);
-    wrap.removeEventListener("focusin", onFocusIn);
-    wrap.removeEventListener("focusout", onFocusOut);
-    wrap.removeEventListener("pointerdown", registerUserInteraction);
-    wrap.removeEventListener("touchstart", registerUserInteraction);
-    wrap.removeEventListener("wheel", registerUserInteraction);
-    wrap.removeEventListener("scroll", onUserScroll);
-    window.removeEventListener("resize", recalculateMetrics);
-    document.removeEventListener("visibilitychange", recalculateMetrics);
-    window.removeEventListener("load", recalculateMetrics);
-
-    if (typeof mediaQuery.removeEventListener === "function") {
-      mediaQuery.removeEventListener("change", recalculateMetrics);
+    if (typeof reducedMotionQuery.removeEventListener === "function") {
+      reducedMotionQuery.removeEventListener("change", applyMarqueeState);
     }
+
+    resetCarouselMotion();
   };
 }
 
 export async function initGrants() {
-  renderGrantsCarousel();
-
   var elements = getCarouselElements();
 
-  if (!elements.container) {
+  if (!elements.track) {
+    renderGrantsCarousel();
+    elements = getCarouselElements();
+  }
+
+  if (!elements.track) {
     console.error(
       "Unable to initialise grants carousel: #grantCards was not found in the homepage markup."
     );
@@ -434,7 +387,7 @@ export async function initGrants() {
         "Unable to render grants carousel: ./data/grants.json is missing a valid grants array.",
         payload
       );
-      setCardsHtml(renderFallback(FALLBACK_MESSAGE), { busy: false });
+      setTrackHtml(renderFallback(FALLBACK_MESSAGE), { busy: false });
       return;
     }
 
@@ -444,19 +397,19 @@ export async function initGrants() {
       console.error(
         "Unable to render grants carousel: ./data/grants.json contains zero grants."
       );
-      setCardsHtml(renderFallback(FALLBACK_MESSAGE), { busy: false });
+      setTrackHtml(renderFallback(FALLBACK_MESSAGE), { busy: false });
       return;
     }
 
-    setCardsHtml(buildGrantCardsHtml(grants), { busy: false });
+    setTrackHtml(buildGrantTrackHtml(grants), { busy: false });
     await waitForNextFrame();
     await waitForNextFrame();
-    grantsCleanup = initAutoplay();
+    grantsCleanup = setupMarquee(grants.length);
   } catch (error) {
     console.error(
       "Unable to load local grants data from ./data/grants.json:",
       error
     );
-    setCardsHtml(renderFallback(FALLBACK_MESSAGE), { busy: false });
+    setTrackHtml(renderFallback(FALLBACK_MESSAGE), { busy: false });
   }
 }
