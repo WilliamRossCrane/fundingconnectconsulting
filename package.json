@@ -2,11 +2,17 @@
   "name": "funding-connect-consulting-website",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "fetch:grants": "node scripts/fetch-grants.js"
   },
   "devDependencies": {
     "prettier": "^3.3.3"
+  },
+  "dependencies": {
+    "cheerio": "^1.1.2",
+    "rss-parser": "^3.13.0"
   }
 }
