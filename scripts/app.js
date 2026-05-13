@@ -6,7 +6,12 @@
 
 "use strict";
 
+import { renderGrantsCarousel } from "../components/grants-carousel.js";
+import { initGrants } from "./grants.js";
+
 function initApp() {
+  renderGrantsCarousel();
+
   if (typeof window.FundingConnectApp.initPageLinks === "function") {
     window.FundingConnectApp.initPageLinks();
   }
@@ -19,9 +24,7 @@ function initApp() {
     window.FundingConnectApp.initForms();
   }
 
-  if (typeof window.FundingConnectApp.initGrants === "function") {
-    window.FundingConnectApp.initGrants();
-  }
+  initGrants();
 }
 
 if (document.readyState === "loading") {

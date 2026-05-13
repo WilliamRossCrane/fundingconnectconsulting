@@ -36,6 +36,7 @@
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: rgba(33, 74, 76, 0.28) transparent;
+  touch-action: pan-x;
 }
 
 .grants-track-wrap::before,
@@ -193,6 +194,7 @@
 
   .grant-card {
     flex-basis: clamp(272px, 84vw, 336px);
+    min-height: 164px;
     scroll-snap-align: start;
   }
 }
