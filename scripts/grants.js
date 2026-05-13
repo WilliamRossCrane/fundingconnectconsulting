@@ -22,7 +22,20 @@
     }
 
     if (grant.closeDate) {
-      var parsed = new Date(grant.closeDate);
+      var parsed;
+      var dateOnlyMatch = normalizeWhitespace(grant.closeDate).match(
+        /^(\d{4})-(\d{2})-(\d{2})$/,
+      );
+
+      if (dateOnlyMatch) {
+        parsed = new Date(
+          Number(dateOnlyMatch[1]),
+          Number(dateOnlyMatch[2]) - 1,
+          Number(dateOnlyMatch[3]),
+        );
+      } else {
+        parsed = new Date(grant.closeDate);
+      }
 
       if (!Number.isNaN(parsed.getTime())) {
         return parsed.toLocaleDateString("en-AU", {
