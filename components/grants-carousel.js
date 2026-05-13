@@ -54,7 +54,7 @@ export function renderGrantsCarousel() {
       escapeHtml(section.status || "Updated regularly") +
       "</span>",
     "  </div>",
-    '  <div class="grants-track-wrap" id="grantsTrackWrap" tabindex="0" aria-label="' +
+    '  <div class="grants-track-wrap" id="grantsTrackWrap" aria-label="' +
       escapeHtml(
         section.trackAriaLabel ||
           "Scrolling grant opportunities - hover or focus to pause"

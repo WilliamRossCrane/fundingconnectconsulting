@@ -254,6 +254,14 @@ function buildGrantCardsHtml(grants) {
   return duplicateGrants(grants).map(renderGrantCard).join("\n");
 }
 
+function waitForNextFrame() {
+  return new Promise(function (resolve) {
+    window.requestAnimationFrame(function () {
+      resolve();
+    });
+  });
+}
+
 function initAutoplay() {
   var elements = getCarouselElements();
   var wrap = elements.wrap;
@@ -274,7 +282,7 @@ function initAutoplay() {
 
   function recalculateMetrics() {
     loopWidth = container.scrollWidth / 2;
-    hasOverflow = wrap.scrollWidth > wrap.clientWidth + 1;
+    hasOverflow = container.scrollWidth > wrap.clientWidth + 1;
 
     if (!Number.isFinite(loopWidth) || loopWidth <= 0) {
       loopWidth = container.scrollWidth;
@@ -369,7 +377,15 @@ function initAutoplay() {
   wrap.addEventListener("scroll", onUserScroll, { passive: true });
   window.addEventListener("resize", recalculateMetrics);
   document.addEventListener("visibilitychange", recalculateMetrics);
-  mediaQuery.addEventListener("change", recalculateMetrics);
+  window.addEventListener("load", recalculateMetrics);
+
+  if (document.fonts?.ready) {
+    document.fonts.ready.then(recalculateMetrics).catch(function () {});
+  }
+
+  if (typeof mediaQuery.addEventListener === "function") {
+    mediaQuery.addEventListener("change", recalculateMetrics);
+  }
 
   return function cleanupAutoplay() {
     window.cancelAnimationFrame(rafId);
@@ -383,7 +399,11 @@ function initAutoplay() {
     wrap.removeEventListener("scroll", onUserScroll);
     window.removeEventListener("resize", recalculateMetrics);
     document.removeEventListener("visibilitychange", recalculateMetrics);
-    mediaQuery.removeEventListener("change", recalculateMetrics);
+    window.removeEventListener("load", recalculateMetrics);
+
+    if (typeof mediaQuery.removeEventListener === "function") {
+      mediaQuery.removeEventListener("change", recalculateMetrics);
+    }
   };
 }
 
@@ -429,6 +449,8 @@ export async function initGrants() {
     }
 
     setCardsHtml(buildGrantCardsHtml(grants), { busy: false });
+    await waitForNextFrame();
+    await waitForNextFrame();
     grantsCleanup = initAutoplay();
   } catch (error) {
     console.error(
