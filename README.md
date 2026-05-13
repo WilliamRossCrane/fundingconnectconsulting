@@ -9,9 +9,6 @@ We pay our respects to Elders past, present and emerging.
 # 🌱 Funding Connect Consulting Website
 
 ![Project Status](https://img.shields.io/badge/status-complete-brightgreen)
-![Vercel Ready](https://img.shields.io/badge/deployment-vercel-black)
-![Static Site](https://img.shields.io/badge/build-static%20site-blue)
-![Grant Updates](https://img.shields.io/badge/grants-automated-orange)
 
 This project is my first completed **vibe coding** website and was developed for a real business, **Funding Connect Consulting**. Because this website represents a real organisation, the business name, content, branding and related data are not available for reuse.
 
@@ -47,36 +44,6 @@ The project is complete as a static website and has been structured so it can be
 
 ---
 
-# ✅ Completed Features
-
-- Professional static website for Funding Connect Consulting
-- Responsive Home, About, Services and Connect sections
-- First Nations-focused content and business positioning
-- Grant opportunities carousel
-- Automated grant data generation into `data/grants.json`
-- Scheduled GitHub Action for updating grant data
-- Clickable grant cards linking to official grant pages
-- Contact and newsletter form layouts
-- Welcome popup component
-- Refactored component structure for easier maintenance
-- Organised CSS structure with feature-based style files
-- Vercel deployment configuration
-
----
-
-# 🔄 Future Improvements
-
-Potential future improvements include:
-
-- Connecting enquiry forms to a production form service
-- Connecting newsletter subscriptions to a live email platform
-- Expanding grant source coverage where reliable public sources are available
-- Adding more resource pages or downloadable guides
-- Further SEO improvements
-- Adding analytics or basic performance monitoring
-
----
-
 # ⚙️ Tech Stack
 
 **HTML** – Website structure and content  
@@ -91,25 +58,22 @@ Potential future improvements include:
 # 🔋 Current Features
 
 👉 **Responsive Landing Page**  
-A clean hero section introducing Funding Connect Consulting and its purpose.
-
-👉 **Multi-Section Layout**  
-Includes Home, About, Services and Connect sections.
+A polished hero section introducing Funding Connect Consulting, its purpose and its First Nations-focused consulting support.
 
 👉 **Automated Grant Opportunities Carousel**  
-Displays grant opportunities from generated grant data, with official source links.
-
-👉 **Services Overview**  
-Outlines consulting services such as grant writing, program design and capacity building.
-
-👉 **Contact and Newsletter Forms**  
-Includes front-end form layouts for enquiries and newsletter subscriptions.
-
-👉 **Mobile-Friendly Design**  
-Responsive layout for smaller screens.
+Displays real grant opportunities from generated grant data, with compact clickable cards linking users to official grant pages.
 
 👉 **Scheduled Grant Data Updates**  
-Uses a GitHub Action to run the grant update script and refresh `data/grants.json`.
+Uses a GitHub Action to run the grant update script and refresh `data/grants.json`, allowing the static site to display regularly updated funding opportunities.
+
+👉 **Contact and Newsletter Forms**  
+Includes front-end enquiry and newsletter form layouts, ready for connection to a production form or email service.
+
+👉 **Welcome Popup Component**  
+Adds a lightweight welcome interaction to support user engagement without requiring a backend.
+
+👉 **Mobile-Friendly Design**  
+Responsive layouts, mobile navigation and carousel behaviour designed for desktop, tablet and smaller screens.
 
 ---
 
@@ -117,76 +81,14 @@ Uses a GitHub Action to run the grant update script and refresh `data/grants.jso
 
 This project helped me practise:
 
-- Vibe coding workflows
-- Building and organising static websites
-- Creating responsive layouts
-- Structuring HTML, CSS and JavaScript projects
-- Refactoring components into clearer feature-based files
-- Working with generated JSON data
-- Using Node.js scripts for static-site data updates
-- Setting up scheduled GitHub Actions
-- Improving front-end design and accessibility
-- Preparing a static website for Vercel deployment
-
----
-
-# 📁 Project Structure
-
-```bash
-funding-connect-consulting/
-├── index.html
-├── vercel.json
-├── README.md
-├── .editorconfig
-├── .gitignore
-├── .prettierrc
-│
-├── .github/
-│   └── workflows/
-│       └── update-grants.yml
-│
-├── assets/
-│   ├── icons/
-│   │   ├── favicon.svg
-│   │   ├── favicon.png
-│   │   └── apple-touch-icon.png
-│   │
-│   └── images/
-│       └── og-image.png
-│
-├── components/
-│   ├── contact.js
-│   ├── dom.js
-│   ├── grants-carousel.js
-│   ├── home.js
-│   ├── layout.js
-│   └── welcome-popup.js
-│
-├── data/
-│   ├── grants.json
-│   └── site-content.js
-│
-├── scripts/
-│   ├── grant-sources/
-│   ├── app.js
-│   ├── fetch-grants.js
-│   ├── forms.js
-│   ├── grants.js
-│   ├── router.js
-│   ├── tabs.js
-│   └── utils.js
-│
-└── styles/
-    ├── main.css
-    ├── tokens.css
-    ├── base.css
-    ├── layout.css
-    ├── components.css
-    ├── pages.css
-    ├── grants.css
-    ├── utilities.css
-    └── welcome-popup.css
-```
+- Using vibe coding workflows to rapidly build, test and refine a real client-style website
+- Building and organising a static website with HTML, CSS and JavaScript
+- Structuring a front-end project with clearer separation between components, scripts, data and styles
+- Working with generated JSON data as a lightweight content/data layer
+- Using Node.js scripts to fetch, filter and generate static-site data
+- Setting up scheduled GitHub Actions to refresh grant data automatically
+- Connecting generated data to front-end UI components
+- Preparing a static website for deployment through Vercel
 
 ---
 
