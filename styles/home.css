@@ -138,18 +138,34 @@
 .grants-track {
   display: flex;
   gap: 20px;
-  animation: slide 32s linear infinite;
   width: max-content;
+  padding-bottom: 10px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(33, 74, 76, 0.28) transparent;
+  animation: grants-slide 34s linear infinite;
 }
 
-.grants-track:hover {
+.grants-track::-webkit-scrollbar {
+  height: 8px;
+}
+
+.grants-track::-webkit-scrollbar-thumb {
+  background: rgba(33, 74, 76, 0.28);
+  border-radius: 999px;
+}
+
+.grants-track-wrap:hover .grants-track,
+.grants-track-wrap:focus-within .grants-track {
   animation-play-state: paused;
 }
 
-@keyframes slide {
+@keyframes grants-slide {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
@@ -158,11 +174,32 @@
 .grant-card {
   background: var(--white);
   border-left: 3px solid var(--gold);
-  padding: 20px 24px;
-  min-width: 280px;
-  max-width: 280px;
+  padding: 16px 20px;
+  min-width: 296px;
+  max-width: 296px;
+  min-height: 172px;
   flex-shrink: 0;
   border-radius: 2px;
+  scroll-snap-align: start;
+  box-shadow: 0 16px 32px rgba(17, 28, 28, 0.06);
+}
+
+.grant-card-link {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    border-color 180ms ease;
+}
+
+.grant-card-link:hover,
+.grant-card-link:focus-visible {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 34px rgba(17, 28, 28, 0.1);
+  border-left-color: #c9771f;
+  outline: none;
 }
 
 .grant-cat {
@@ -176,22 +213,51 @@
 
 .grant-title {
   font-family: "Playfair Display", serif;
-  font-size: 15px;
+  font-size: 16px;
   color: var(--deep);
   line-height: 1.35;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  min-height: 2.7em;
 }
 
 .grant-amount {
   font-size: 13px;
   font-weight: 700;
   color: var(--gold);
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .grant-close {
   font-size: 11px;
   color: #888;
+  margin-bottom: 0;
+}
+
+.grant-link {
+  color: var(--deep);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: auto;
+  opacity: 0.72;
+}
+
+.grant-card-fallback {
+  max-width: 420px;
+  min-height: auto;
+}
+
+.grants-disclaimer {
+  margin-top: 18px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #6d7474;
 }
 
 

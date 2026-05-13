@@ -78,6 +78,17 @@
     padding: 48px 20px;
   }
 
+  .grants-header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .grant-card {
+    min-width: min(272px, calc(100vw - 56px));
+    max-width: min(272px, calc(100vw - 56px));
+  }
+
   /* Blurb */
   .blurb {
     grid-template-columns: 1fr;
@@ -144,7 +155,19 @@
   }
 }
 
+@media (max-width: 1024px) {
+  .grant-card {
+    min-width: 272px;
+    max-width: 272px;
+  }
+}
+
 @media (max-width: 520px) {
+  .grants-track-wrap::before,
+  .grants-track-wrap::after {
+    width: 28px;
+  }
+
   .steps {
     grid-template-columns: 1fr;
   }
