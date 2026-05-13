@@ -3,6 +3,9 @@
 (function () {
   var GRANTS_PATH = "./data/grants.json";
   var MAX_GRANTS = 6;
+  var AUTO_SCROLL_PX_PER_SECOND = 26;
+  var USER_IDLE_DELAY_MS = 2200;
+  var grantsCleanup = null;
 
   function escapeHtml(value) {
     return window.FundingConnectComponents.escapeHtml(value || "");
@@ -152,14 +155,43 @@
     ].join("\n");
   }
 
-  function setCardsHtml(html) {
-    var container = document.getElementById("grantCards");
+  function renderLoadingCard() {
+    return [
+      '<article class="grant-card grant-card-loading" role="listitem" aria-hidden="true">',
+      '  <p class="grant-cat">Grant Updates</p>',
+      '  <h3 class="grant-title">Loading recent grant opportunities</h3>',
+      '  <p class="grant-amount">Please wait a moment</p>',
+      '  <p class="grant-close">Checking the latest local grant data.</p>',
+      "</article>",
+    ].join("\n");
+  }
+
+  function getCarouselElements() {
+    return {
+      wrap: document.getElementById("grantsTrackWrap"),
+      container: document.getElementById("grantCards"),
+    };
+  }
+
+  function setCardsHtml(html, options) {
+    var elements = getCarouselElements();
+    var container = elements.container;
+    var config = options || {};
 
     if (!container) {
       return;
     }
 
+    container.setAttribute("aria-busy", config.busy ? "true" : "false");
     container.innerHTML = html;
+
+    if (elements.wrap) {
+      elements.wrap.scrollLeft = 0;
+    }
+  }
+
+  function showLoadingCard() {
+    setCardsHtml(renderLoadingCard(), { busy: true });
   }
 
   async function loadGrants() {
@@ -176,32 +208,190 @@
     return response.json();
   }
 
-  async function renderGrantCards() {
-    var container = document.getElementById("grantCards");
+  function duplicateGrants(grants) {
+    if (grants.length < 2) {
+      return grants.slice();
+    }
 
-    if (!container) {
+    return grants.concat(grants);
+  }
+
+  function buildGrantCardsHtml(grants) {
+    return duplicateGrants(grants).map(renderGrantCard).join("\n");
+  }
+
+  function initAutoplay() {
+    var elements = getCarouselElements();
+    var wrap = elements.wrap;
+    var container = elements.container;
+    var mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var rafId = 0;
+    var lastFrameTime = 0;
+    var lastUserInteractionAt = 0;
+    var isPointerInside = false;
+    var isFocusInside = false;
+    var isAutoScrolling = false;
+    var loopWidth = 0;
+    var hasOverflow = false;
+
+    if (!wrap || !container) {
+      return function () {};
+    }
+
+    function recalculateMetrics() {
+      loopWidth = container.scrollWidth / 2;
+      hasOverflow = wrap.scrollWidth > wrap.clientWidth + 1;
+
+      if (!Number.isFinite(loopWidth) || loopWidth <= 0) {
+        loopWidth = container.scrollWidth;
+      }
+
+      if (!hasOverflow) {
+        wrap.scrollLeft = 0;
+      } else if (wrap.scrollLeft >= loopWidth) {
+        wrap.scrollLeft = wrap.scrollLeft - loopWidth;
+      }
+    }
+
+    function shouldPause() {
+      return (
+        mediaQuery.matches ||
+        !hasOverflow ||
+        isPointerInside ||
+        isFocusInside ||
+        document.hidden ||
+        Date.now() - lastUserInteractionAt < USER_IDLE_DELAY_MS
+      );
+    }
+
+    function step(timestamp) {
+      if (!lastFrameTime) {
+        lastFrameTime = timestamp;
+      }
+
+      var delta = timestamp - lastFrameTime;
+      lastFrameTime = timestamp;
+
+      if (!shouldPause()) {
+        var nextScrollLeft =
+          wrap.scrollLeft + (AUTO_SCROLL_PX_PER_SECOND * delta) / 1000;
+
+        if (nextScrollLeft >= loopWidth) {
+          nextScrollLeft = nextScrollLeft - loopWidth;
+        }
+
+        isAutoScrolling = true;
+        wrap.scrollLeft = nextScrollLeft;
+        isAutoScrolling = false;
+      }
+
+      rafId = window.requestAnimationFrame(step);
+    }
+
+    function registerUserInteraction() {
+      lastUserInteractionAt = Date.now();
+    }
+
+    function onPointerEnter() {
+      isPointerInside = true;
+    }
+
+    function onPointerLeave() {
+      isPointerInside = false;
+    }
+
+    function onFocusIn() {
+      isFocusInside = true;
+    }
+
+    function onFocusOut(event) {
+      if (!wrap.contains(event.relatedTarget)) {
+        isFocusInside = false;
+      }
+    }
+
+    function onUserScroll() {
+      if (!isAutoScrolling) {
+        registerUserInteraction();
+      }
+    }
+
+    recalculateMetrics();
+    rafId = window.requestAnimationFrame(step);
+
+    wrap.addEventListener("mouseenter", onPointerEnter);
+    wrap.addEventListener("mouseleave", onPointerLeave);
+    wrap.addEventListener("focusin", onFocusIn);
+    wrap.addEventListener("focusout", onFocusOut);
+    wrap.addEventListener("pointerdown", registerUserInteraction, {
+      passive: true,
+    });
+    wrap.addEventListener("touchstart", registerUserInteraction, {
+      passive: true,
+    });
+    wrap.addEventListener("wheel", registerUserInteraction, {
+      passive: true,
+    });
+    wrap.addEventListener("scroll", onUserScroll, { passive: true });
+    window.addEventListener("resize", recalculateMetrics);
+    document.addEventListener("visibilitychange", recalculateMetrics);
+    mediaQuery.addEventListener("change", recalculateMetrics);
+
+    return function cleanupAutoplay() {
+      window.cancelAnimationFrame(rafId);
+      wrap.removeEventListener("mouseenter", onPointerEnter);
+      wrap.removeEventListener("mouseleave", onPointerLeave);
+      wrap.removeEventListener("focusin", onFocusIn);
+      wrap.removeEventListener("focusout", onFocusOut);
+      wrap.removeEventListener("pointerdown", registerUserInteraction);
+      wrap.removeEventListener("touchstart", registerUserInteraction);
+      wrap.removeEventListener("wheel", registerUserInteraction);
+      wrap.removeEventListener("scroll", onUserScroll);
+      window.removeEventListener("resize", recalculateMetrics);
+      document.removeEventListener("visibilitychange", recalculateMetrics);
+      mediaQuery.removeEventListener("change", recalculateMetrics);
+    };
+  }
+
+  async function initGrants() {
+    var elements = getCarouselElements();
+
+    if (!elements.container) {
       return;
     }
 
+    if (typeof grantsCleanup === "function") {
+      grantsCleanup();
+      grantsCleanup = null;
+    }
+
+    showLoadingCard();
+
     try {
       var payload = await loadGrants();
-      var grants = Array.isArray(payload && payload.grants) ? payload.grants.slice(0, MAX_GRANTS) : [];
+      var grants = Array.isArray(payload && payload.grants)
+        ? payload.grants.slice(0, MAX_GRANTS)
+        : [];
 
       if (!grants.length) {
         setCardsHtml(
           renderFallback("Grant opportunities could not be loaded. Please check back soon."),
+          { busy: false },
         );
         return;
       }
 
-      setCardsHtml(grants.concat(grants).map(renderGrantCard).join("\n"));
+      setCardsHtml(buildGrantCardsHtml(grants), { busy: false });
+      grantsCleanup = initAutoplay();
     } catch (error) {
       console.warn("Unable to load local GrantConnect data:", error);
       setCardsHtml(
         renderFallback("Grant opportunities could not be loaded. Please check back soon."),
+        { busy: false },
       );
     }
   }
 
-  document.addEventListener("DOMContentLoaded", renderGrantCards);
+  window.FundingConnectApp = window.FundingConnectApp || {};
+  window.FundingConnectApp.initGrants = initGrants;
 })();

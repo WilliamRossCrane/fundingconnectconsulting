@@ -30,8 +30,12 @@
 }
 
 .grants-track-wrap {
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
   position: relative;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(33, 74, 76, 0.28) transparent;
 }
 
 .grants-track-wrap::before,
@@ -59,48 +63,31 @@
   display: flex;
   gap: 20px;
   width: max-content;
-  padding-bottom: 10px;
-  overflow-x: auto;
-  scroll-snap-type: x proximity;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(33, 74, 76, 0.28) transparent;
-  animation: grants-slide 34s linear infinite;
+  min-width: 100%;
+  padding: 4px 0 10px;
 }
 
-.grants-track::-webkit-scrollbar {
+.grants-track-wrap::-webkit-scrollbar {
   height: 8px;
 }
 
-.grants-track::-webkit-scrollbar-thumb {
+.grants-track-wrap::-webkit-scrollbar-thumb {
   background: rgba(33, 74, 76, 0.28);
   border-radius: 999px;
 }
 
-.grants-track-wrap:hover .grants-track,
-.grants-track-wrap:focus-within .grants-track {
-  animation-play-state: paused;
-}
-
-@keyframes grants-slide {
-  from {
-    transform: translateX(0);
-  }
-
-  to {
-    transform: translateX(-50%);
-  }
+.grants-track-wrap:focus-visible {
+  outline: 2px solid rgba(14, 77, 87, 0.25);
+  outline-offset: 4px;
 }
 
 .grant-card {
   background: var(--white);
   border-left: 3px solid var(--gold);
   padding: 16px 20px;
-  min-width: 296px;
-  max-width: 296px;
+  flex: 0 0 clamp(272px, 30vw, 296px);
   min-height: 172px;
-  flex-shrink: 0;
   border-radius: 2px;
-  scroll-snap-align: start;
   box-shadow: 0 16px 32px rgba(17, 28, 28, 0.06);
 }
 
@@ -173,6 +160,15 @@
   min-height: auto;
 }
 
+.grant-card-loading {
+  pointer-events: none;
+  opacity: 0.92;
+}
+
+.grant-card-loading .grant-link {
+  display: none;
+}
+
 .grants-disclaimer {
   margin-top: 18px;
   font-size: 12px;
@@ -191,16 +187,19 @@
     gap: 12px;
   }
 
+  .grants-track-wrap {
+    scroll-snap-type: x proximity;
+  }
+
   .grant-card {
-    min-width: min(272px, calc(100vw - 56px));
-    max-width: min(272px, calc(100vw - 56px));
+    flex-basis: clamp(272px, 84vw, 336px);
+    scroll-snap-align: start;
   }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .grant-card {
-    min-width: 272px;
-    max-width: 272px;
+    flex-basis: clamp(272px, 34vw, 292px);
   }
 }
 
@@ -208,5 +207,11 @@
   .grants-track-wrap::before,
   .grants-track-wrap::after {
     width: 28px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grants-track-wrap {
+    scroll-behavior: auto;
   }
 }

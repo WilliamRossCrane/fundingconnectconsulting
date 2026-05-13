@@ -6,7 +6,7 @@
 
 "use strict";
 
-document.addEventListener("DOMContentLoaded", function () {
+function initApp() {
   if (typeof window.FundingConnectApp.initPageLinks === "function") {
     window.FundingConnectApp.initPageLinks();
   }
@@ -18,4 +18,14 @@ document.addEventListener("DOMContentLoaded", function () {
   if (typeof window.FundingConnectApp.initForms === "function") {
     window.FundingConnectApp.initForms();
   }
-});
+
+  if (typeof window.FundingConnectApp.initGrants === "function") {
+    window.FundingConnectApp.initGrants();
+  }
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
