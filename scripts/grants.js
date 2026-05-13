@@ -64,7 +64,12 @@
     return "Grant Opportunity";
   }
 
-  function inferFundingAmount(summary) {
+  function inferFundingAmount(grant) {
+    if (normalizeWhitespace(grant.amount)) {
+      return normalizeWhitespace(grant.amount);
+    }
+
+    var summary = grant.summary || "";
     var text = normalizeWhitespace(summary);
     var patterns = [
       /\bup to \$[\d,.]+(?:\s*(?:million|billion|thousand))?\b/i,
@@ -85,6 +90,17 @@
     return "Funding available";
   }
 
+  function renderCardMeta(grant) {
+    var category = inferCategory(grant);
+    var source = normalizeWhitespace(grant.source);
+
+    if (!source) {
+      return category;
+    }
+
+    return category + " • " + source;
+  }
+
   function hasUsableLink(grant) {
     return /^https?:\/\//i.test(normalizeWhitespace(grant.link));
   }
@@ -103,9 +119,9 @@
 
     return [
       "<" + tagName + cardAttributes + ">",
-      '  <p class="grant-cat">' + escapeHtml(inferCategory(grant)) + "</p>",
+      '  <p class="grant-cat">' + escapeHtml(renderCardMeta(grant)) + "</p>",
       '  <h3 class="grant-title">' + escapeHtml(title) + "</h3>",
-      '  <p class="grant-amount">' + escapeHtml(inferFundingAmount(grant.summary)) + "</p>",
+      '  <p class="grant-amount">' + escapeHtml(inferFundingAmount(grant)) + "</p>",
       '  <p class="grant-close">Closes: ' + escapeHtml(formatCloseDate(grant)) + "</p>",
       '  <span class="grant-link">View official grant</span>',
       "</" + tagName + ">",

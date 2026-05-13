@@ -21,7 +21,7 @@
         '    <div class="grants-track" id="grantCards" role="list" aria-live="polite">',
         "    </div>",
         "  </div>",
-        '  <p class="grants-disclaimer">Grant information is sourced from GrantConnect. Please refer to the official grant page for full eligibility and application details.</p>',
+        '  <p class="grants-disclaimer">Grant information is sourced from GrantConnect, Queensland Government and business.gov.au. Please refer to each official grant page for full eligibility and application details.</p>',
         "</section>",
       ].join("\n"),
     );
