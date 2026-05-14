@@ -198,6 +198,7 @@
           var isActive = index === 0;
           return [
             "<button",
+            '  type="button"',
             '  class="tab-btn' + (isActive ? " active" : "") + '"',
             '  role="tab"',
             '  id="tab-btn-' + escapeHtml(tab.id) + '"',
@@ -265,6 +266,7 @@
       '  class="tab-panel' + (isActive ? " active" : "") + '"',
       '  role="tabpanel"',
       '  aria-labelledby="tab-btn-' + escapeHtml(panelId) + '"',
+      isActive ? "" : "  hidden",
       ">",
       hasForm
         ? [
