@@ -7,6 +7,8 @@
 "use strict";
 
 (function () {
+  window.FundingConnectApp = window.FundingConnectApp || {};
+
   /**
    * Show a named page.
    * @param {string} pageId  'home' | 'about' | 'services' | 'connect'

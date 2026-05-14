@@ -19,7 +19,7 @@ function getEscapeHtml() {
   return fallbackEscapeHtml;
 }
 
-function renderLoadingCard() {
+export function renderGrantsLoadingCard() {
   return [
     '<article class="grant-card grant-card-loading" role="listitem" aria-hidden="true">',
     '  <p class="grant-cat">Grant Updates</p>',
@@ -61,7 +61,7 @@ export function renderGrantsCarousel() {
       ) +
       '">',
     '    <div class="grants-carousel-track grants-track" id="grantCards" aria-live="polite" aria-busy="true">',
-    renderLoadingCard(),
+    renderGrantsLoadingCard(),
     "    </div>",
     "  </div>",
     '  <p class="grants-disclaimer">Grant information is sourced from GrantConnect, Queensland Government and business.gov.au. Please refer to each official grant page for full eligibility and application details.</p>',

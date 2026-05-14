@@ -7,6 +7,8 @@
 "use strict";
 
 (function () {
+  window.FundingConnectApp = window.FundingConnectApp || {};
+
   function escapeHtml(value) {
     return String(value)
       .replace(/&/g, "&amp;")

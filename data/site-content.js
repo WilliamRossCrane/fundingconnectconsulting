@@ -37,57 +37,6 @@ window.FCC_CONTENT = {
     trackAriaLabel: "Scrolling grant opportunities — hover to pause",
   },
 
-  grants: [
-    {
-      category: "Health & Wellbeing",
-      title: "Indigenous Health & Wellbeing Fund",
-      amount: "Up to $150,000",
-      close: "Closes 30 Jun 2026",
-    },
-    {
-      category: "Education",
-      title: "First Nations Education Support Grants",
-      amount: "Up to $80,000",
-      close: "Closes 15 Jul 2026",
-    },
-    {
-      category: "Economic Development",
-      title: "Indigenous Business Australia – Growth Fund",
-      amount: "$50,000 – $500,000",
-      close: "Open rolling",
-    },
-    {
-      category: "Housing",
-      title: "Remote Housing Infrastructure Program",
-      amount: "Up to $2,000,000",
-      close: "Closes 1 Aug 2026",
-    },
-    {
-      category: "Culture & Arts",
-      title: "AIATSIS Community Heritage Grants",
-      amount: "Up to $30,000",
-      close: "Closes 20 Jul 2026",
-    },
-    {
-      category: "Youth",
-      title: "Strong Communities Youth Development",
-      amount: "Up to $120,000",
-      close: "Closes 31 Aug 2026",
-    },
-    {
-      category: "Environment",
-      title: "Land & Sea Country Ranger Program",
-      amount: "Up to $250,000",
-      close: "Open rolling",
-    },
-    {
-      category: "Governance",
-      title: "Governance & Capability Support Fund",
-      amount: "Up to $60,000",
-      close: "Closes 14 Sep 2026",
-    },
-  ],
-
   homeBlurb: {
     heading: "Specialist support for First Nations organisations",
     paragraphs: [

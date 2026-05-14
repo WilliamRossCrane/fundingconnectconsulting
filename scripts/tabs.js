@@ -7,6 +7,8 @@
 "use strict";
 
 (function () {
+  window.FundingConnectApp = window.FundingConnectApp || {};
+
   var tabsBound = false;
 
   /**
@@ -59,6 +61,5 @@
     }
   }
 
-  window.switchTab = switchTab;
   window.FundingConnectApp.initTabs = initTabs;
 })();

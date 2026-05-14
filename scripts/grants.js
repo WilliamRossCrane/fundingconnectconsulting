@@ -1,4 +1,7 @@
-import { renderGrantsCarousel } from "../components/grants-carousel.js";
+import {
+  renderGrantsCarousel,
+  renderGrantsLoadingCard,
+} from "../components/grants-carousel.js";
 
 var GRANTS_PATH = "./data/grants.json";
 var GRANTS_TRACK_SELECTOR = "#grantCards";
@@ -191,17 +194,6 @@ function renderFallback(message) {
   ].join("\n");
 }
 
-function renderLoadingCard() {
-  return [
-    '<article class="grant-card grant-card-loading" role="listitem" aria-hidden="true">',
-    '  <p class="grant-cat">Grant Updates</p>',
-    '  <h3 class="grant-title">Loading recent grant opportunities</h3>',
-    '  <p class="grant-amount">Please wait a moment</p>',
-    '  <p class="grant-close">Checking the latest local grant data.</p>',
-    "</article>",
-  ].join("\n");
-}
-
 function renderGrantCardSet(grants, options) {
   var config = options || {};
   var groupClassName =
@@ -247,7 +239,6 @@ function resetCarouselMotion() {
     return;
   }
 
-  elements.shell.classList.remove("is-marquee-active");
   elements.track.classList.remove("is-marquee-active");
   elements.track.style.removeProperty("--grants-loop-distance");
   elements.track.style.removeProperty("--grants-marquee-duration");
@@ -275,7 +266,7 @@ function setTrackHtml(html, options) {
 }
 
 function showLoadingCard() {
-  setTrackHtml(renderLoadingCard(), { busy: true });
+  setTrackHtml(renderGrantsLoadingCard(), { busy: true });
 }
 
 async function loadGrants() {
@@ -315,7 +306,6 @@ function setupMarquee(grantCount) {
   function applyMarqueeState() {
     var shouldAnimate = !reducedMotionQuery.matches;
 
-    shell.classList.toggle("is-marquee-active", shouldAnimate);
     track.classList.toggle("is-marquee-active", shouldAnimate);
 
     if (!shouldAnimate) {
